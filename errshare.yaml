@@ -5,8 +5,8 @@ errshare:
     upload_ip_domain: 127.0.0.1
     debug: True
 mongodb:
-    ip: 
-    port:
-    db_name: ""
-    db_user: ""
-    db_password: ""
+    ip: 192.168.87.128
+    port: 6700
+    db_name: "errshare"
+    db_user: "root"
+    db_password: "123"
