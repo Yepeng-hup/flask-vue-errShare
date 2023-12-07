@@ -1,0 +1,12 @@
+---
+errshare:
+    ip: 127.0.0.1
+    port: 8088
+    upload_ip_domain: 127.0.0.1
+    debug: True
+mongodb:
+    ip: 
+    port:
+    db_name: ""
+    db_user: ""
+    db_password: ""
