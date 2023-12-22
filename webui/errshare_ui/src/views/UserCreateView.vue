@@ -1,0 +1,426 @@
+<template>
+  <div id="usercreate">
+      <!-- <el-breadcrumb :separator-icon="ArrowRight"> -->
+      <div class="home-centext">
+          <div class="flex">
+              <div class="input-box">
+              <el-input
+                  v-model="keyS"
+                  placeholder="输入关键字"
+                  class="input-with-select"
+              >
+              <template #append>
+                  <el-button @click="searchUser"><el-icon><Search /></el-icon></el-button>
+              </template>
+              </el-input>
+          </div>
+          <el-button type="primary" @click="addUser">新建用户</el-button>
+          </div>
+          <!-- :data后面是数据源元组加对象 -->
+          <ul class="infinite-list" style="overflow: auto">
+            <el-table :data="userInfoList" style="width: 100%">
+                <el-table-column prop="user" label="用户名" width="100" />
+                <el-table-column prop="role" label="角色" width="100" />
+                <el-table-column prop="phone" label="电话"/>
+                <el-table-column prop="mailbox" label="邮箱"/>
+                <el-table-column prop="mg_state" label="状态">
+                    <template #default="scope">
+                        <el-switch v-model="scope.row.mg_state"/>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button type="primary" @click="editUser(scope.row)">编辑</el-button>
+                        <el-button type="danger" @click="deleteUser(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+          </ul>
+
+          <!-- 分页 -->
+          <el-pagination
+              style="margin-top: 20px;"
+              small
+              background
+              layout="prev, pager, next, jumper, sizes, total"
+              :total="total"
+              v-model:current-page="searchParams.pagenum"
+              :page-sizes="[5,10,15,20]"
+              v-model:page-size="searchParams.pagesize"
+              @size-change="searchUser"
+              @current-change="searchUser"
+          />
+
+      </div>
+      <!-- 新建弹窗对话框 -->
+      <el-dialog v-model="dialogFormVisible" title="新建用户">
+          <el-form 
+          :model="fromData"
+          :rules="rules"
+          ref="userFrom"
+          label-width="120px"
+          class="demo-ruleForm"
+          >
+              <el-form-item label="用户名" prop="user">
+                  <el-input id="user" style="width: 80%;" v-model="fromData.user" placeholder="输入用户名" />
+              </el-form-item>
+              <el-form-item label="角色" prop="role">
+                <el-select v-model="fromData.role"  placeholder="角色选择">
+                <el-option 
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                  <el-input  type="password" id="password" style="width: 80%;" v-model="fromData.password" placeholder="输入密码" />
+              </el-form-item>
+              <el-form-item label="确认密码" prop="password1">
+                  <el-input type="password" id="password1" style="width: 80%;" v-model="fromData.password1" placeholder="输入密码" />
+              </el-form-item>
+              <el-form-item label="手机号" prop="phone">
+                  <el-input id="phone" style="width: 80%;" v-model="fromData.phone" placeholder="输入手机号" />
+              </el-form-item>
+              <el-form-item label="邮箱" prop="mailbox">
+                  <el-input id="mailbox" style="width: 80%;" v-model="fromData.mailbox" placeholder="输入邮箱" />
+              </el-form-item>
+          </el-form>
+          <template #footer>
+              <div>
+                  <el-button type="danger" @click="cancellation">取消</el-button>
+                  <el-button  type="warning" @click="resetDialogForm">重置</el-button>
+                  <el-button type="primary" @click="confirms(userFrom)">确认</el-button>
+              </div>
+          </template>
+      </el-dialog>
+
+      <!-- 编辑弹窗对话框 -->
+      <el-dialog v-model="dialogFormVisible1" title="编辑用户">
+          <el-form 
+          :model="fromData1"
+          :rules="rules1"
+          ref="userFrom1"
+          label-width="120px"
+          class="demo-ruleForm"
+          >
+              <el-form-item label="角色" prop="role">
+                <el-select v-model="fromData1.role"  placeholder="角色选择">
+                <el-option 
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+          </el-form>
+
+          <template #footer>
+              <div>
+                  <el-button type="danger" @click="cancellation1">取消</el-button>
+                  <!-- <el-button  type="warning" @click="resetDialogForm1">重置</el-button> -->
+                  <el-button type="primary" @click="confirms1(userFrom1)">确认</el-button>
+              </div>
+          </template>
+      </el-dialog>     
+  </div>
+
+</template>
+
+
+<script>
+import { toRefs, reactive, ref} from "vue"
+import { ElMessage } from 'element-plus'
+
+
+import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/utils/apis"
+
+  export default {
+      name: "userCreateView",
+      setup(){
+          const data=reactive({
+              keyS: "",
+              //分页参数对象
+              searchParams: {
+                  query: "",
+                  pagesize: 5,
+                  pagenum: 1,
+              },
+              //存储返回用户数据空数组
+              userInfoList: [],
+              //用户总条数
+              total: "",
+              //状态控制
+              dialogFormVisible: false,
+              dialogFormVisible1: false,
+              fromData: {
+                  user: "",
+                  role: "",
+                  password: "",
+                  password1: "",
+                  phone: "",
+                  mailbox: "",
+              },
+              fromData1: {
+                  user: "",
+                  role: "",
+                  phone: "",
+                  mailbox: "",
+              },
+              rules: {
+                  user: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  role: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  password: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  password1: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  phone: [
+                      {
+                          required: false, 
+                          // 匹配手机号正则
+                          pattern: /^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/,
+                          message: "请填写正确的手机号", 
+                          trigger: "blur",
+                      }
+                  ],
+                  mailbox: [
+                      {
+                          required: false, 
+                          // 匹配邮箱正则
+                          pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                          message: "邮箱格式不正确", 
+                          trigger: "blur",
+                      }
+                  ],
+              },
+              rules1: {
+                  role: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+              },
+
+
+
+          })
+
+          const value = ref('')
+
+          const options = [
+              {
+                value: 'admin',
+                label: 'admin',
+              },
+              {
+                value: 'ordinary',
+                label: 'ordinary',
+              },
+              {
+                value: 'view',
+                label: 'view',
+              },
+            ]
+
+          function showALLUserInfo(){
+            showUserGet(data.searchParams).then(
+                  res => {
+                          data.userInfoList=res.userlist
+                          data.total=res.total                   
+                  }
+              )
+          }
+
+          const searchUser=()=>{
+            showUserGet(data.searchParams).then(
+                  res => {
+                          console.log("get data -> ", res)
+                          data.userInfoList=res.userlist
+                          data.total=res.total
+                  
+                  }
+              )
+          }
+
+          const addUser=()=>{
+              data.dialogFormVisible=true
+          }
+
+          const cancellation1=()=>{
+              data.dialogFormVisible1=false
+          }
+          const cancellation=()=>{
+              //重置表单
+              resetDialogForm()
+              data.dialogFormVisible=false
+          }
+
+
+          const userFrom=ref()
+          const userFrom1=ref()
+          //新建用户获取弹窗表单数据
+          const confirms=(formData)=>{
+               formData.validate(
+                  res=>{
+                      //验证表单是否通过
+                      if(!res){
+                          return
+                      }
+                      //通过就发送请求
+                      createUserPost(data.fromData).then(
+                          res => {
+                              //重置表单
+                              resetDialogForm()
+                              //关闭弹窗
+                              data.dialogFormVisible = false
+                              //更新页面到最新数据
+                              showALLUserInfo()
+                              //后端响应结果
+                              console.log("login data -> ", res) 
+                          }
+                      )
+                  }
+               )
+          }
+
+          //重置表单数据
+          const resetDialogForm=()=>{
+              //逐个重置表单为初始状态
+              data.fromData.user = ''
+              data.fromData.role = ''
+              data.fromData.password = ''
+              data.fromData.password1 = ''
+              data.fromData.phone = ''
+              data.fromData.mailbox = ''
+          }
+
+
+          //分页
+          const paging=()=>{
+              
+          }
+
+          const statusUpdate=()=>{
+
+          }
+
+          // 编辑用户数据
+          const editUser=row=>{
+              const {user, role, phone, mailbox} = row
+              data.dialogFormVisible1=true
+              data.fromData1.user=user
+              data.fromData1.role=role
+              data.fromData1.phone=phone
+              data.fromData1.mailbox=mailbox
+          }
+
+
+          const confirms1=(formData1)=>{
+              formData1.validate(
+                  res=>{
+                      //验证表单是否通过
+                      if(!res){
+                          return
+                      }
+                      //通过就发送请求
+                      updateUserPost(data.fromData1).then(
+                          res => {
+                              //重置表单
+                              resetDialogForm()
+                              //关闭弹窗
+                              data.dialogFormVisible1 = false
+                              //更新页面到最新数据
+                              showALLUserInfo()
+                              //后端响应结果
+                              if (res.code != 200){
+                                  ElMessage(
+                                  {
+                                      message: "修改失败",
+                                      type: "error",
+                                      duration: 5000,
+                                  }
+                                )
+                                return
+                              }
+                              ElMessage(
+                                {
+                                    message: "修改成功",
+                                    type: "success",
+                                    duration: 5000,
+                                }
+                              )
+                          }
+                      )
+                  }
+               )
+          }
+
+          // 删除用户
+          const deleteUser=row=>{
+              const {user} = row 
+              console.log("delete user---> ", user)
+              // 请求里必须传入对象
+              delUserDelete({"user": user}).then(
+                    res => {
+                        //后端响应结果
+                        if (res.code != 200){
+                                  ElMessage(
+                                  {
+                                      message: "删除失败",
+                                      type: "error",
+                                      duration: 5000,
+                                  }
+                                )
+                                return
+                              }
+                              ElMessage(
+                                {
+                                    message: "删除成功",
+                                    type: "success",
+                                    duration: 5000,
+                                }
+                              )
+                    }
+              )
+
+          }
+
+          //浏览器访问时，实时获取页面所有数据
+          showALLUserInfo()
+
+          return {
+              ... toRefs(data),
+              searchUser,
+              addUser,
+              confirms,
+              confirms1,
+              resetDialogForm,
+              cancellation,
+              cancellation1,
+              userFrom,
+              userFrom1,
+              paging,
+              editUser,
+              deleteUser,
+              statusUpdate,
+              value,
+              options,
+          }
+      }
+  };
+</script>
+
+
+
+<style scoped>
+.input-box{
+  width: 300px;
+  margin-right: 15px;
+}
+</style>
