@@ -337,12 +337,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
             data.searchText = ''
           }
 
-
-          //分页
-          const paging=()=>{
-              
-          }
-
+          // 禁用选项
           const statusUpdate=()=>{
 
           }
@@ -409,7 +404,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
                         if (res.code != 200){
                                   ElMessage(
                                   {
-                                      message: "删除失败",
+                                      message: res.msg,
                                       type: "error",
                                       duration: 5000,
                                   }
@@ -418,7 +413,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
                               }
                               ElMessage(
                                 {
-                                    message: "删除成功",
+                                    message: res.msg,
                                     type: "success",
                                     duration: 5000,
                                 }
@@ -443,15 +438,12 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               cancellation1,
               userFrom,
               userFrom1,
-              paging,
               editUser,
               deleteUser,
               statusUpdate,
               value,
               options,
-
-              InfoFilled,
-              
+              InfoFilled,         
           }
       }
   };
