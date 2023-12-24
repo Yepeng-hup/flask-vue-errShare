@@ -42,6 +42,15 @@ export const showUserGet = data=>{
     )
 }
 
+export const searchUserGet = data=>{
+    return get(
+        {
+            url: "/user/search",
+            data
+        }
+    )
+}
+
 export const createUserPost = data=>{
     return post(
         {

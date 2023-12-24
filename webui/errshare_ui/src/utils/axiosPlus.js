@@ -44,7 +44,7 @@ Service.interceptors.response.use(
         loadingObj.close()
         ElMessage(
             {
-                message: "server error",
+                message: "服务器错误",
                 type: "error",
                 duration: 5000,
             }

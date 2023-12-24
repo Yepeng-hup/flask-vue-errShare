@@ -5,7 +5,7 @@
           <div class="flex">
               <div class="input-box">
               <el-input
-                  v-model="keyS"
+                  v-model="searchText"
                   placeholder="输入关键字"
                   class="input-with-select"
               >
@@ -31,7 +31,23 @@
                 <el-table-column label="操作">
                     <template #default="scope">
                         <el-button type="primary" @click="editUser(scope.row)">编辑</el-button>
-                        <el-button type="danger" @click="deleteUser(scope.row)">删除</el-button>
+                        <el-popconfirm
+                            confirm-button-text="确定"
+                            confirm-button-type="danger"
+                            cancel-button-text="取消"
+                            cancel-button-type="primary"
+                            :icon="InfoFilled"
+                            icon-color="#f3715c"
+                            title="确认删除?"
+                            @confirm="deleteUser(scope.row)"
+                            @cancel="cancelEvent"
+                        >
+                        <template #reference>
+                            <!-- <el-button type="danger" @click="deleteUser(scope.row)">删除</el-button> -->
+                            <el-button type="danger">删除</el-button>
+                        </template>
+                            
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -133,15 +149,16 @@
 <script>
 import { toRefs, reactive, ref} from "vue"
 import { ElMessage } from 'element-plus'
+import { InfoFilled } from '@element-plus/icons-vue'
 
 
-import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/utils/apis"
+import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGet} from "@/utils/apis"
 
   export default {
       name: "userCreateView",
       setup(){
           const data=reactive({
-              keyS: "",
+              searchText: "",
               //分页参数对象
               searchParams: {
                   query: "",
@@ -184,7 +201,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
                   ],
                   phone: [
                       {
-                          required: false, 
+                          required: true, 
                           // 匹配手机号正则
                           pattern: /^1((34[0-8])|(8\d{2})|(([35][0-35-9]|4[579]|66|7[35678]|9[1389])\d{1}))\d{7}$/,
                           message: "请填写正确的手机号", 
@@ -193,7 +210,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
                   ],
                   mailbox: [
                       {
-                          required: false, 
+                          required: true, 
                           // 匹配邮箱正则
                           pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
                           message: "邮箱格式不正确", 
@@ -238,15 +255,15 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
           }
 
           const searchUser=()=>{
-            showUserGet(data.searchParams).then(
+            searchUserGet({"user": data.searchText}).then(
                   res => {
-                          console.log("get data -> ", res)
-                          data.userInfoList=res.userlist
-                          data.total=res.total
-                  
+                        data.userInfoList=res.user_list
+                        data.total=res.total
+                        resetSsData()              
                   }
               )
           }
+
 
           const addUser=()=>{
               data.dialogFormVisible=true
@@ -282,7 +299,23 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
                               //更新页面到最新数据
                               showALLUserInfo()
                               //后端响应结果
-                              console.log("login data -> ", res) 
+                              if (res.code != 200){
+                                  ElMessage(
+                                  {
+                                      message: res.msg,
+                                      type: "error",
+                                      duration: 5000,
+                                  }
+                                )
+                                return
+                              }
+                              ElMessage(
+                                {
+                                    message: res.msg,
+                                    type: "success",
+                                    duration: 5000,
+                                }
+                              )
                           }
                       )
                   }
@@ -298,6 +331,10 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
               data.fromData.password1 = ''
               data.fromData.phone = ''
               data.fromData.mailbox = ''
+          }
+
+          const resetSsData=()=>{
+            data.searchText = ''
           }
 
 
@@ -341,7 +378,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
                               if (res.code != 200){
                                   ElMessage(
                                   {
-                                      message: "修改失败",
+                                      message: res.msg,
                                       type: "error",
                                       duration: 5000,
                                   }
@@ -350,7 +387,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
                               }
                               ElMessage(
                                 {
-                                    message: "修改成功",
+                                    message: res.msg,
                                     type: "success",
                                     duration: 5000,
                                 }
@@ -364,10 +401,10 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
           // 删除用户
           const deleteUser=row=>{
               const {user} = row 
-              console.log("delete user---> ", user)
               // 请求里必须传入对象
               delUserDelete({"user": user}).then(
                     res => {
+                        showALLUserInfo()
                         //后端响应结果
                         if (res.code != 200){
                                   ElMessage(
@@ -401,6 +438,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
               confirms,
               confirms1,
               resetDialogForm,
+              resetSsData,
               cancellation,
               cancellation1,
               userFrom,
@@ -411,6 +449,9 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete} from "@/util
               statusUpdate,
               value,
               options,
+
+              InfoFilled,
+              
           }
       }
   };
