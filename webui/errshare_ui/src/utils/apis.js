@@ -5,7 +5,7 @@ import {post, get, del} from "./axiosPlus"
 export const userLoginPost = data=>{
     return post(
         {
-            url: "/err/login",
+            url: "/tt",
             data
         }
     )
@@ -33,6 +33,16 @@ export const showClassGet = data=>{
 
 
 //每个请求封装成单个函数
+export const loginPost = data=>{
+    return post(
+        {
+            url: "/err/login",
+            data
+        }
+    )
+}
+
+
 export const showUserGet = data=>{
     return get(
         {

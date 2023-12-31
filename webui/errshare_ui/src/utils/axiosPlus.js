@@ -2,7 +2,7 @@ import axios from "axios";
 import { ElLoading, ElMessage} from 'element-plus'
 
 let loadingObj = null
-const baseURL = "http://192.168.5.137:8088";  
+const baseURL = "http://192.168.1.13:8088";  
 
 //创建axios实例，公共使用
 const Service = axios.create({
