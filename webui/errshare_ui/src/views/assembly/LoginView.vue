@@ -11,11 +11,11 @@
         <el-input v-model="pwd" type="password" class="w-50 m-2" placeholder="密码" />
       </div>
       <div style="margin-top: 10px; text-align: center;">
-        <el-button type="success" @click="login">登录</el-button>
+        <el-button style="width: 200px; margin-bottom: 25px;" type="primary" @click="login">登录</el-button>
       </div>
-      <div>
-        <a href="#" style="float:right;color: #5cb85c;text-decoration: none;">忘记密码?</a>
-      </div>
+      <!-- <div>
+        <a href="#" style="float:right;color: #0b87e7;text-decoration: none;">忘记密码?</a>
+      </div> -->
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@
 import { toRefs, reactive,} from "vue"
 import { ElMessage } from 'element-plus'
 import { useRouter } from "vue-router";
-import {loginPost} from '@/utils/apis'
+import axios from "axios";
 
 export default {
     name: "loginView",
@@ -39,33 +39,47 @@ export default {
 
         const router = useRouter()
 
+        // function resetData(){
+        //     data.user = ''
+        //     data.pwd = ''
+        // }
+
         const login = ()=>{
-            loginPost({"username": data.user, "password": data.pwd}).then(
-                res => {
-                            if (res.code == 200){
-                                router.push(
-                                    {
-                                        name: 'layout', 
-                                        query: {
-                                                u: res.username,
-                                                r: res.role,
-                                        },
-                                    }
-                                )
-                            }else {
-                                router.push('/')
-                                ElMessage(
-                                  {
-                                    //   message: res.msg,
-                                      message: "用户名或密码错误",
-                                      type: "error",
-                                      duration: 3000,
-                                  }
-                                )
-                            }       
-                    }
-            )
-        }
+          axios.post('http://192.168.1.119:8088/err/login', {
+            "username": data.user, 
+            "password": data.pwd,
+            })  
+            .then(res => {  
+              if (res.data.code == 200){
+                // console.log("lay ----> ", router)
+                      router.push(
+                          {
+                              name: 'layout', 
+                              query: {
+                                      u: res.data.username,
+                                      r: res.data.role,
+                                      t: res.data.token,
+                              },
+                          }
+                      )
+              }else {
+                      router.push('/')
+                      // resetData()
+                      ElMessage(
+                        {
+                            message: res.data.msg,
+                            type: "error",
+                            duration: 3000,
+                        }
+                      )
+                }       
+
+            })  
+            .catch(error => {  
+              console.error(error); 
+            })
+      }
+
 
         return {
             ... toRefs(data),
@@ -80,14 +94,14 @@ export default {
 <style scoped>
 .outer-box{
     width: 754px;
-    background: #efef;
+    background: 	#F0FFFF;
     margin: 0 auto;
     overflow: hidden;
     margin-top: 10%;
 }
 .page-title{
     text-align: center;
-    color: #5cb85c;
+    color: #0b87e7;
 }
 .sign-box{
     width: 300px;

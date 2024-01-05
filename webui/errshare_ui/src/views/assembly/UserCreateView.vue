@@ -3,7 +3,7 @@
       <!-- <el-breadcrumb :separator-icon="ArrowRight"> -->
       <div class="home-centext">
           <div class="flex">
-              <div class="input-box">
+            <div class="input-box">
               <el-input
                   v-model="searchText"
                   placeholder="输入关键字"
@@ -13,8 +13,9 @@
                   <el-button @click="searchUser"><el-icon><Search /></el-icon></el-button>
               </template>
               </el-input>
-          </div>
-          <el-button type="primary" @click="addUser">新建用户</el-button>
+			</div>
+			<el-button type="primary" @click="addUser">新建用户</el-button>
+			<el-button type="primary" @click="updatePasswd">密码修改</el-button>
           </div>
           <!-- :data后面是数据源元组加对象 -->
           <ul class="infinite-list" style="overflow: auto">
@@ -68,6 +69,7 @@
           />
 
       </div>
+
       <!-- 新建弹窗对话框 -->
       <el-dialog v-model="dialogFormVisible" title="新建用户">
           <el-form 
@@ -112,6 +114,35 @@
           </template>
       </el-dialog>
 
+      <!-- 修改密码弹窗对话框 -->
+      <el-dialog v-model="dialogFormVisible2" title="密码修改">
+          <el-form 
+          :model="fromPwd"
+          :rules="rules2"
+          ref="pwdFrom"
+          label-width="120px"
+          class="demo-ruleForm"
+          >
+              <el-form-item label="用户名" prop="user">
+                  <el-input id="user" style="width: 80%;" v-model="fromPwd.user" placeholder="输入用户名" />
+              </el-form-item>
+              <el-form-item label="密码" prop="passwd">
+                  <el-input  type="password" id="passwd" style="width: 80%;" v-model="fromPwd.passwd" placeholder="输入密码" />
+              </el-form-item>
+              <el-form-item label="确认密码" prop="passwd1">
+                  <el-input type="password" id="passwd1" style="width: 80%;" v-model="fromPwd.passwd1" placeholder="输入密码" />
+              </el-form-item>
+          </el-form>
+          <template #footer>
+              <div>
+                  <el-button type="danger" @click="cancellationPwd">取消</el-button>
+                  <el-button  type="warning" @click="resetDialogPwdForm">重置</el-button>
+                  <el-button type="primary" @click="confirms2(pwdFrom)">确认</el-button>
+              </div>
+          </template>
+      </el-dialog>
+
+
       <!-- 编辑弹窗对话框 -->
       <el-dialog v-model="dialogFormVisible1" title="编辑用户">
           <el-form 
@@ -150,9 +181,10 @@
 import { toRefs, reactive, ref} from "vue"
 import { ElMessage } from 'element-plus'
 import { InfoFilled } from '@element-plus/icons-vue'
+import { useRouter} from "vue-router";
 
 
-import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGet} from "@/utils/apis"
+import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGet, updateUserPwdPost} from "@/utils/apis"
 
   export default {
       name: "userCreateView",
@@ -172,6 +204,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               //状态控制
               dialogFormVisible: false,
               dialogFormVisible1: false,
+              dialogFormVisible2: false,
               fromData: {
                   user: "",
                   role: "",
@@ -185,6 +218,11 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
                   role: "",
                   phone: "",
                   mailbox: "",
+              },
+              fromPwd: {
+                user: "",
+                passwd: "",
+                passwd1: "",
               },
               rules: {
                   user: [
@@ -223,6 +261,17 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
                       {required: true, message: "必填项", trigger: "blur"}
                   ],
               },
+              rules2: {
+                  user: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  passwd: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+                  passwd1: [
+                      {required: true, message: "必填项", trigger: "blur"}
+                  ],
+              },
 
 
 
@@ -245,7 +294,20 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               },
             ]
 
+            const router = useRouter();
+            //如果发送请求中没有token会重定向
+            // const checkTokenToLogin = () => {
+            //     if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            //         router.push({ name: 'loginView' });
+            //         // return
+            //     }  
+            // }
+
           function showALLUserInfo(){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
             showUserGet(data.searchParams).then(
                   res => {
                           data.userInfoList=res.userlist
@@ -255,6 +317,10 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
           }
 
           const searchUser=()=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
             searchUserGet({"user": data.searchText}).then(
                   res => {
                         data.userInfoList=res.user_list
@@ -268,6 +334,9 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
           const addUser=()=>{
               data.dialogFormVisible=true
           }
+          const updatePasswd=()=> {
+            data.dialogFormVisible2=true
+          }
 
           const cancellation1=()=>{
               data.dialogFormVisible1=false
@@ -278,11 +347,23 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               data.dialogFormVisible=false
           }
 
+          const cancellationPwd=()=>{
+              //重置表单
+              resetDialogPwdForm()
+              data.dialogFormVisible2=false
+          }
+
 
           const userFrom=ref()
           const userFrom1=ref()
+          const pwdFrom=ref()
+
           //新建用户获取弹窗表单数据
           const confirms=(formData)=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
                formData.validate(
                   res=>{
                       //验证表单是否通过
@@ -333,6 +414,13 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               data.fromData.mailbox = ''
           }
 
+          const resetDialogPwdForm=()=>{
+              //逐个重置表单为初始状态
+              data.fromPwd.user = ''
+              data.fromPwd.passwd = ''
+              data.fromPwd.passwd1 = ''
+          }
+
           const resetSsData=()=>{
             data.searchText = ''
           }
@@ -352,14 +440,18 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               data.fromData1.mailbox=mailbox
           }
 
-
+          //编辑
           const confirms1=(formData1)=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
               formData1.validate(
                   res=>{
                       //验证表单是否通过
                       if(!res){
                           return
-                      }
+                      } 
                       //通过就发送请求
                       updateUserPost(data.fromData1).then(
                           res => {
@@ -367,9 +459,45 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
                               resetDialogForm()
                               //关闭弹窗
                               data.dialogFormVisible1 = false
-                              //更新页面到最新数据
                               showALLUserInfo()
-                              //后端响应结果
+                              if (res.code != 200){
+                                  ElMessage(
+                                  {
+                                      message: res.msg,
+                                      type: "error",
+                                      duration: 5000,
+                                  }
+                                )
+                                return
+                              }
+                              ElMessage(
+                                {
+                                    message: res.msg,
+                                    type: "success",
+                                    duration: 5000,
+                                }
+                              )
+                          }
+                      )
+                  }
+               )
+          }
+
+          // 修改密码
+          const confirms2=(fromPwd)=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
+              fromPwd.validate(
+                  res=>{
+                      if(!res){
+                          return
+                      } 
+                      updateUserPwdPost(data.fromPwd).then(
+                          res => {
+                              resetDialogPwdForm()
+                              data.dialogFormVisible2 = false
                               if (res.code != 200){
                                   ElMessage(
                                   {
@@ -395,6 +523,10 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
           // 删除用户
           const deleteUser=row=>{
+              if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+                    router.push({ name: 'loginView' });
+                    return
+                }  
               const {user} = row 
               // 请求里必须传入对象
               delUserDelete({"user": user}).then(
@@ -430,14 +562,19 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
               ... toRefs(data),
               searchUser,
               addUser,
+              updatePasswd,
               confirms,
               confirms1,
-              resetDialogForm,
+              confirms2,
               resetSsData,
               cancellation,
               cancellation1,
+              cancellationPwd,
+              resetDialogForm,
+              resetDialogPwdForm,
               userFrom,
               userFrom1,
+              pwdFrom,
               editUser,
               deleteUser,
               statusUpdate,

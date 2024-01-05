@@ -1,4 +1,14 @@
 import {post, get, del} from "./axiosPlus"
+// import { useRouter} from "vue-router";
+
+
+// const router = useRouter();
+// const checkTokenToLogin = () => {
+//     console.log(router)
+//     if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+//         router.push({ name: 'loginView' });
+//     }  
+// }
 
 
 // 测试接口
@@ -22,6 +32,7 @@ export const showArticleGet = data=>{
 
 
 export const showClassGet = data=>{
+    // checkTokenToLogin()
     return get(
         {
             url: "/test/class",
@@ -33,17 +44,9 @@ export const showClassGet = data=>{
 
 
 //每个请求封装成单个函数
-export const loginPost = data=>{
-    return post(
-        {
-            url: "/err/login",
-            data
-        }
-    )
-}
-
-
+// ############################## 用户相关 #####################################
 export const showUserGet = data=>{
+    
     return get(
         {
             url: "/user/get",
@@ -53,6 +56,7 @@ export const showUserGet = data=>{
 }
 
 export const searchUserGet = data=>{
+
     return get(
         {
             url: "/user/search",
@@ -93,6 +97,27 @@ export const showWzClassGet = data=>{
     return get(
         {
             url: "/wz/test",
+            data
+        }
+    )
+}
+
+export const updateUserPwdPost = data=>{
+    return post(
+        {
+            url: "/user/update/passwd",
+            data
+        }
+    )
+}
+
+
+// ############################## 文章相关 #####################################
+
+export const contentWritePost = data=>{
+    return post(
+        {
+            url: "/wz/w",
             data
         }
     )

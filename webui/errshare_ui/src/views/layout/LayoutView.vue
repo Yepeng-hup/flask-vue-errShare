@@ -7,7 +7,7 @@
               <el-col :span="24">
   
                 <el-menu
-                  active-text-color="#ffd04b"
+                  active-text-color="#0b87e7"
                   background-color="#545c64"
                   text-color="#fff"
                   default-active="1"
@@ -15,6 +15,7 @@
                   :collapse-transition="false"
                   :router="true"
                 >
+                <!-- 伸缩后可以直接隐藏字符 -->
                 <div style="padding: 15px; color: #ffffff">
                   <h2>errShare</h2>
                 </div>
@@ -63,7 +64,7 @@
           <div>
 
             <el-dropdown>
-              <el-button type="success" style="color: #ffffff; background: #5cb85c;">你好 {{ title }}</el-button>
+              <el-button type="primary" style="color: #ffffff; background: #0b87e7;">{{ title }}</el-button>
               <template #dropdown>
                 <el-dropdown-menu>  
                   <el-dropdown-item> 
@@ -78,7 +79,7 @@
                     </el-menu>
                   </el-dropdown-item>  
                   <el-dropdown-item>  
-                    <a href="/"><span class="hover-text" @click="loginout">退出</span></a>
+                    <a href="/"><span class="hover-text" @click="loginout()">退出</span></a>
                   </el-dropdown-item>  
                 </el-dropdown-menu>  
               </template>
@@ -99,7 +100,6 @@
 <script>
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router';
-  import {userLoginPost} from '@/utils/apis'
 
   
   export default {
@@ -120,34 +120,44 @@
     const route = useRoute();
     const user = route.query.u;
     const role = route.query.r;
+    const token = route.query.t;
 
-      const fetchUserData = async () => {
-        userLoginPost().then(
-          res => {
-                    // let roleName=res.role;
-                    // let userName=res.username;
-                    let roleName=role;
-                    let userName=user;
-                    title.value = userName;
-                    
-                    if (roleName == "admin"){
-                        const userData = { isAdmin: true };
-                        showUserManagement.value = userData.isAdmin;
-                        showArticleManagement.value = userData.isAdmin;
-                  
+    // 保存token至本地
+    function saveTokenAndInfo(){
+      if (localStorage.getItem('userToken') == 'undefined'||localStorage.getItem('userToken') == null){
+        // console.log('token')
+        localStorage.setItem('userToken', token)
+      }
+      if (localStorage.getItem('user') == 'undefined'||localStorage.getItem('user') == null){
+        localStorage.setItem('user', user)
+      }
+      if (localStorage.getItem('role') == 'undefined'||localStorage.getItem('role') == null){
+        localStorage.setItem('role', role)
+      }
+    }
+    saveTokenAndInfo()
 
-                    } else if (roleName == "ordinary"){
-                        const userData = { isAdmin: false };
-                        const articleData = { isAdmin: true };
-                        showUserManagement.value = userData.isAdmin;
-                        showArticleManagement.value = articleData.isAdmin;
 
-                    }else {
-                      const xx = "xx"
-                      console.log(xx, res)
-                    }             
-            }
-        )
+    //
+    const fetchUserData = async () => {
+            let roleName=localStorage.getItem('role');
+            let userName=localStorage.getItem('user');
+            title.value = userName;
+            
+            if (roleName == "admin"){
+                const userData = { isAdmin: true };
+                showUserManagement.value = userData.isAdmin;
+                showArticleManagement.value = userData.isAdmin;
+            } else if (roleName == "ordinary"){
+                const userData = { isAdmin: false };
+                const articleData = { isAdmin: true };
+                showUserManagement.value = userData.isAdmin;
+                showArticleManagement.value = articleData.isAdmin;
+
+            }else {
+              const xx = "view"
+              console.log(xx)
+            }             
     };
 
     onMounted(() => {
@@ -156,7 +166,9 @@
     });
 
     const loginout = ()=>{
-      console.log("exit ok")
+      localStorage.removeItem('userToken')
+      localStorage.removeItem('user')
+      localStorage.removeItem('role')
     }
 
       return {
@@ -180,7 +192,7 @@
   }
   .header {
     height: 60px;
-    background: #5cb85c;
+    background: #0b87e7;
     display: flex;
   }
   

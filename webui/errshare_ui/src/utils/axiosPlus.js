@@ -2,7 +2,7 @@ import axios from "axios";
 import { ElLoading, ElMessage} from 'element-plus'
 
 let loadingObj = null
-const baseURL = "http://192.168.1.13:8088";  
+const baseURL = "http://192.168.1.119:8088";
 
 //创建axios实例，公共使用
 const Service = axios.create({
@@ -12,11 +12,10 @@ const Service = axios.create({
         //数据类型
         "Content-type": "application/json;charset=utf-8",
 
-        //授权的api,必须传入token
-        // "Authorization": "",
+        //授权的api,必须传入token,否则无权访问
+        "Authorization": 'Bearer '+ localStorage.getItem('userToken'),
     },
 })
-
 
 
 //请求拦截
