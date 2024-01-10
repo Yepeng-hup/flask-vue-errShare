@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章内容</title>
+    <link href="{{ url_for('static', filename='front/css/csstools/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/css/index.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='front/js/jstools/highlight/styles/github-dark-dimmed.min.css') }}">
+    <script src="{{ url_for('static', filename='front/js/jstools/highlight/highlight.min.js') }}"></script>
+     <script>hljs.highlightAll();</script>
+    <style>
+        h4{
+            text-align: center;
+            color: #0b87e7;
+        }
+        .backg {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body style="background-color: #efefef">
+
+      <div>
+            <nav class="navbar navbar-light" style="background-color: #0b87e7;">
+                <a style="color: #eeeeee" class="navbar-brand" href="/index">
+                    返回
+                </a>
+            </nav>
+      </div>
+
+      <div class="col-xs-12 col-md-9">
+          <div class="post-group backg">
+            {% for i in content_list%}
+                <h4>{{i.titel}}</h4>
+                <div style="padding: 20px" class="post-content">
+                    {{i.text|safe}}
+                </div>
+            {% endfor %}
+          </div>
+      </div>
+
+
+
+      <div class="col-xs-6 col-md-2" style="margin-left: 30px">
+              <div class="list-group" style="margin-top: 10px">
+                  <a href="/index" class="list-group-item" style="text-align: center; background-color: #0b87e7;color: #ffffff">所有分类</a>
+                  {% for i in all_class_list %}
+                    <a href="/choose/{{i.class}}" class="list-group-item" style="text-align: center">{{i.class}}</a>
+                  {% endfor %}
+              </div>
+      </div>
+</body>
+
+</html>

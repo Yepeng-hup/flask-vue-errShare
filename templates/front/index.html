@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/css/index.css')}}">
+    <script src="{{ url_for('static', filename='front/js/jstools/jquery.min.js') }}"></script>
+    <link href="{{ url_for('static', filename='front/css/csstools/bootstrap.min.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='front/js/jstools/bootstrap.min.js') }}"></script>
+    <style>
+        .backg {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+
+<body style="background-color: #efefef">
+  <div>
+        <nav class="navbar navbar-light" style="background-color: #0b87e7;">
+          <span class="navbar-brand" style="color: #eeeeee">errShare</span>
+        </nav>
+  </div>
+
+  <div class="col-xs-12 col-md-9">
+    <div class="post-group backg">
+              <ul class="post-group-head">
+                  <form class="navbar-form navbar-left" method="post" action="{{ url_for('admin.admin_search') }}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input style="width: 300px" type="text" name="searchText" class="form-control" placeholder="输入标题关键字">
+                    </div>
+                      <input type="submit" class="btn btn-success" value="搜索">
+                  </form>
+              </ul>
+
+              <ul class="post-list-group">
+                  {% for i in text_list %}
+                      <li>
+                        <div class="author-avatar-group">
+                          <img src="/static/images/user.png" alt="x">
+                        </div>
+                                <div class="post-info-group">
+                                  <p class="post-info">
+                                    <h4 class="post-title">
+                                      <a style="text-decoration: none; color: #0b87e7" href="/documents/select/{{i.titel}}">{{i.titel}}</a>
+                                    </h4>
+                                    <span><img src="/static/images/edit.png" style="width: 15px"/>: {{i.user}}</span>
+                                    <span style="margin-left: 20px"><img src="/static/images/date.png" style="width: 15px"/>: {{i.date}}</span>
+                                    <span style="margin-left: 20px"><img src="/static/images/label.png" style="width: 15px"/>: {{i.label}}</span>
+                                  </p>
+                                </div>
+
+                      </li>
+                  {% endfor %}
+
+              </ul>
+
+            <div>
+<!--                分页代码 -->
+            </div>
+    </div>
+  </div>
+
+
+  <div class="col-xs-6 col-md-2" style="margin-left: 30px">
+          <div class="list-group" style="margin-top: 10px">
+              <a href="/index" class="list-group-item" style="text-align: center; background-color: #0b87e7;color: #ffffff">所有分类</a>
+              {% for i in all_class_list %}
+                <a href="/choose/{{i.class}}" class="list-group-item" style="text-align: center">{{i.class}}</a>
+              {% endfor %}
+          </div>
+  </div>
+
+
+</body>
