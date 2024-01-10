@@ -1,16 +1,37 @@
 from flask import Flask
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+import datetime
 
 from core.conf import fk_host, fk_port, fk_debug
-from model.sqlite.create import create_tables
-from view.front.test import test
-from view.front.user import user
+from core.init import Inits
+from view.adm.test import test
+from view.adm.user_manage import user_manage
+from view.adm.article_manage import article_manage
+from view.adm.admin import admin
+from view.adm.data import data
+from model.secure.pwd import Pwd_encryption_decrypt
 
 app = Flask(__name__)
+i = Inits()
+
+# 前端请求跨域
+CORS(app)
+
+# 这个key要定义成变量
 app.secret_key = 'ertyuiplbcvrtRTYssa345oplyt'
+app.config['JWT_SECRET_KEY'] = 'errShare123321qawsedrftgyhnbvcAXFBJK'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
 app.config['JSON_AS_ASCII'] = False
 app.config['SCHEDULER_TIMEZONE'] = 'Asia/Shanghai'
 app.register_blueprint(test)
-app.register_blueprint(user)
+app.register_blueprint(user_manage)
+app.register_blueprint(admin)
+app.register_blueprint(article_manage)
+app.register_blueprint(data)
+jwt = JWTManager(app)
+
+p = Pwd_encryption_decrypt()
 
 
 def clogo():
@@ -21,9 +42,9 @@ def clogo():
     print("==                                                       ==")
     print("===========================================================")
 
+
 if __name__ == "__main__":
-    # create_tables()
-    # p.encryption("123456")
-    # p.decrypt("sha256:260000$LJ8V42ju0n06eawy$8fc4432e5547e08e765778c60988189cc683c47c4ccac452f2829814a1e2cf52", "123456")
     clogo()
-    app.run(debug=False, host=fk_host, port=fk_port)
+    i.init_sqlite()
+    i.init_user_and_role()
+    app.run(debug=fk_debug, host=fk_host, port=fk_port)
