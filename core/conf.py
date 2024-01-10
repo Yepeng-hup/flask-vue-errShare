@@ -21,6 +21,7 @@ fk_host = _svc.get("ip")
 fk_port = _svc.get("port")
 fk_debug = _svc.get("debug")
 fk_upload_ip_domain = _svc.get("upload_ip_domain")
+fk_ssl_type = _svc.get("ssl_type")
 
 _mongo = y.get("mongodb")
 mg_host = _mongo.get("ip")
