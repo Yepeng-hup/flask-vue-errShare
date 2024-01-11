@@ -1,12 +1,12 @@
 from flask import Blueprint, jsonify, request
 import traceback
+import copy
 
 from model.mongo.mgMode import Mg_mode
 from core.httpStatus import Http_status
 from core.utils.utils import check_network_status, check_localhost_site, check_server_status
 from core.conf import mg_host, mg_port, fk_host, fk_port, fk_ssl_type
 from core.svclog import svc_log_err
-
 
 data = Blueprint("data", __name__)
 mg = Mg_mode()
@@ -42,7 +42,7 @@ def check_all():
         status = check_server_status()
         return jsonify({"code": Http_status.http_status_ok, "msg": status})
     elif action == "siteCheck":
-        url = fk_ssl_type+"://"+str(fk_host)+":"+str(fk_port)+"/index"
+        url = fk_ssl_type + "://" + str(fk_host) + ":" + str(fk_port) + "/index"
         if check_localhost_site(url):
             return jsonify({"code": Http_status.http_status_ok, "msg": "errShare site running ..."})
         else:
@@ -52,7 +52,18 @@ def check_all():
         return
 
 
-@data.route("/pic")
+@data.route("/pic/data")
 def show_all_picture():
+    rel = mg.select_all_class({'_id': 0, 'date': 0, })
+    deep_copy_rel_list = copy.deepcopy(rel)
+    for c in rel:
+        class_num = mg.select_wz_num({"class": c['class']})
+        for d in deep_copy_rel_list:
+            if c['class'] == d['class']:
+                d.update({'num': class_num})
+                break
 
-    pass
+    num_list = [d["num"] for d in deep_copy_rel_list]
+    class_list = [d["class"] for d in deep_copy_rel_list]
+    print(class_list, num_list)
+    return jsonify({"code": Http_status.http_status_ok, "num_list": num_list, "class_list": class_list})

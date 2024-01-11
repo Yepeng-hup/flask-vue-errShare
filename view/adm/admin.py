@@ -12,6 +12,11 @@ p = Pwd_encryption_decrypt()
 mg = Mg_mode()
 
 
+@admin.route("/test")
+def tests():
+    return jsonify({"code": 200})
+
+
 @admin.route("/documents/select/<file_name>")
 def read_send_content(file_name):
     svc_log_info(f"cat file title [{file_name}]")
