@@ -47,4 +47,4 @@ if __name__ == "__main__":
     clogo()
     i.init_sqlite()
     i.init_user_and_role()
-    app.run(host=fk_host, port=fk_port)
+    app.run(debug=fk_debug, host=fk_host, port=fk_port)
