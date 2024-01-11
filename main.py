@@ -5,7 +5,6 @@ import datetime
 
 from core.conf import fk_host, fk_port, fk_debug
 from core.init import Inits
-from view.adm.test import test
 from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
 from view.adm.admin import admin
@@ -24,7 +23,6 @@ app.config['JWT_SECRET_KEY'] = 'errShare123321qawsedrftgyhnbvcAXFBJK'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
 app.config['JSON_AS_ASCII'] = False
 app.config['SCHEDULER_TIMEZONE'] = 'Asia/Shanghai'
-app.register_blueprint(test)
 app.register_blueprint(user_manage)
 app.register_blueprint(admin)
 app.register_blueprint(article_manage)
