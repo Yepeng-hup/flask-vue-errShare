@@ -73,6 +73,8 @@ def wz_set():
     classs = data.get('classs')
     label = data.get('label')
     content = data.get('textHtml')
+    if title == '' or classs == '' or content == '':
+        return jsonify({"code": Http_status.http_status_server_err})
     b = mg.insert_text(title, user, classs, label, content)
     if not b:
         return jsonify({"code": Http_status.http_status_server_err})
@@ -122,6 +124,8 @@ def text_search():
 def class_set():
     data = request.get_json()
     class_name = data.get('class')
+    if class_name == '':
+        return jsonify({"code": Http_status.http_status_server_err})
     b = mg.insert_class(class_name)
     if not b:
         return jsonify({"code": Http_status.http_status_server_err})
@@ -178,6 +182,8 @@ def class_delete():
 def label_set():
     data = request.get_json()
     label_name = data.get('label')
+    if label_name == '':
+        return jsonify({"code": Http_status.http_status_server_err})
     b = mg.insert_label(label_name)
     if not b:
         return jsonify({"code": Http_status.http_status_server_err})
