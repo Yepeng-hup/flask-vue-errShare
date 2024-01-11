@@ -7,15 +7,15 @@ from core.svclog import svc_log_info
 
 
 class Mg_mode(object):
-    current_time = datetime.now()
 
     def insert_text(self, titel, user, class_list, label_list, text) -> bool:
+        current_time = datetime.now()
         text_obj = {
             "titel": titel,
             "user": user,
             "class": class_list,
             "label": label_list,
-            "date": self.current_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "date": current_time.strftime("%Y-%m-%d %H:%M:%S"),
             "text": text,
         }
         try:
@@ -27,9 +27,10 @@ class Mg_mode(object):
             return False
 
     def insert_class(self, class_name) -> bool:
+        current_time = datetime.now()
         class_obj = {
             "class": class_name,
-            "date": self.current_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "date": current_time.strftime("%Y-%m-%d %H:%M:%S"),
         }
         try:
             class_data = mg_col_es_class.insert_one(class_obj)
@@ -40,9 +41,10 @@ class Mg_mode(object):
             return False
 
     def insert_label(self, label_name) -> bool:
+        current_time = datetime.now()
         label_obj = {
             "label": label_name,
-            "date": self.current_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "date": current_time.strftime("%Y-%m-%d %H:%M:%S"),
         }
         try:
             label_data = mg_col_es_label.insert_one(label_obj)
@@ -53,9 +55,10 @@ class Mg_mode(object):
             return False
 
     def insert_login_info(self, user_name) -> bool:
+        current_time = datetime.now()
         info_obj = {
             "user": user_name,
-            "date": self.current_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "date": current_time.strftime("%Y-%m-%d %H:%M:%S"),
         }
         try:
             info_data = mg_col_es_login_info.insert_one(info_obj)
