@@ -16,11 +16,6 @@ p = Pwd_encryption_decrypt()
 mg = Mg_mode()
 
 
-@user_manage.route("/tt", methods=['POST'])
-def loginss():
-    return jsonify({"code": 200, "role": "admin", "username": "root"})
-
-
 @user_manage.route("/err/login", methods=['POST'])
 def login():
     data = request.get_json()
