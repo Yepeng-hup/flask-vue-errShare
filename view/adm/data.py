@@ -27,7 +27,6 @@ def check_all():
     data = request.get_json()
     action = data.get('action')
     if action == "mongoCheck":
-        # 检测逻辑
         if not check_network_status(mg_host, mg_port):
             return jsonify({
                 "code": Http_status.http_status_server_err,
@@ -65,5 +64,4 @@ def show_all_picture():
 
     num_list = [d["num"] for d in deep_copy_rel_list]
     class_list = [d["class"] for d in deep_copy_rel_list]
-    print(class_list, num_list)
     return jsonify({"code": Http_status.http_status_ok, "num_list": num_list, "class_list": class_list})
