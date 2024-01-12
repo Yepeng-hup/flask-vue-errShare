@@ -177,3 +177,8 @@ class Mg_mode(object):
         for result in rel:
             login_info_list.append(result)
         return login_info_list
+
+    def update_text(self, term, content) -> bool:
+        new_update_value = {"$set": {"text": content}}
+        rel = mg_col_es_text.update_one(term, new_update_value)
+        return rel.raw_result['updatedExisting']
