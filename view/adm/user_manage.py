@@ -23,7 +23,6 @@ def loginss():
 
 @user_manage.route("/err/login", methods=['POST'])
 def login():
-    # 登录逻辑
     data = request.get_json()
     user_name = data.get('username')
     password = data.get('password')
@@ -59,7 +58,6 @@ def create_user():
         hash_pwd = p.encryption(passwd1)
         cursor.execute("INSERT INTO users (username, role, password, phone, mailbox) VALUES (?, ?, ?, ?, ?)",
                        (username, role, hash_pwd, phone, mailbox))
-        print("create form data -----> ", data)
         return jsonify({'code': Http_status.http_status_ok, "msg": "用户创建成功"})
     except:
         print(traceback.format_exc())
@@ -122,7 +120,7 @@ def delete_user():
 @check_token
 def search_user():
     username = request.args.get('user')
-    cursor.execute("SELECT username,role,phone,mailbox  FROM users WHERE username=?", (username,))
+    cursor.execute("SELECT username,role,phone,mailbox  FROM users WHERE username LIKE ?", ('%' + username + '%',))
     rel = cursor.fetchall()
     user_obj = data_init(rel)
     return jsonify({"user_list": user_obj, "total": len(user_obj)})
@@ -133,7 +131,6 @@ def search_user():
 @check_token
 def update_user_pwd():
     data = request.get_json()
-    print(data)
     user_name = data.get('user')
     pwd = data.get('passwd')
     pwd1 = data.get('passwd1')

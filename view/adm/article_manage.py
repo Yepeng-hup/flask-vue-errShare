@@ -1,8 +1,6 @@
-from flask import Blueprint, jsonify, request, send_file
-import traceback
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from datetime import datetime
-import os
 import copy
 import re
 
@@ -10,13 +8,15 @@ from model.mongo.mgMode import Mg_mode
 from core.utils.utils import check_token
 from core.conf import fk_upload_ip_domain, fk_port
 from core.httpStatus import Http_status
-from core.svclog import svc_log_info, svc_log_err
+from core.svclog import svc_log_err
 
 article_manage = Blueprint("article_manage", __name__)
 mg = Mg_mode()
 
 
 @article_manage.route("/wz/upload/images", methods=['POST'])
+@jwt_required()
+@check_token
 def wz_upload_images():
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
@@ -41,6 +41,8 @@ def wz_upload_images():
 
 
 @article_manage.route("/wz/upload/video", methods=['POST'])
+@jwt_required()
+@check_token
 def wz_upload_video():
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
@@ -64,8 +66,8 @@ def wz_upload_video():
 
 
 @article_manage.route("/wz/w", methods=['POST'])
-# @jwt_required()
-# @check_token
+@jwt_required()
+@check_token
 def wz_set():
     data = request.get_json()
     user = data.get('user')
@@ -82,12 +84,21 @@ def wz_set():
 
 
 @article_manage.route("/wz/r")
+@jwt_required()
+@check_token
 def wz_read():
     text_list = mg.select_text({}, {'text': 0, '_id': 0})
-    return jsonify({"code": Http_status.http_status_ok, "wzList": text_list, 'num': len(text_list)})
+    pagesize = int(request.args.get('pagesize', 10))
+    pagenum = int(request.args.get('pagenum', 1))
+    start_index = (pagenum - 1) * pagesize
+    end_index = start_index + pagesize
+    paginated_text = text_list[start_index:end_index]
+    return jsonify({"code": Http_status.http_status_ok, "wzList": paginated_text, 'num': len(text_list)})
 
 
 @article_manage.route("/wz/d", methods=['DELETE'])
+@jwt_required()
+@check_token
 def wz_delete():
     content_list = list()
     data = request.get_json()
@@ -106,13 +117,32 @@ def wz_delete():
     return jsonify({"code": Http_status.http_status_ok, "msg": "回收成功"})
 
 
-@article_manage.route("/wz/edit", methods=['POST'])
+@article_manage.route("/wz/edit/show", methods=['POST'])
+@jwt_required()
+@check_token
+def text_edit_show():
+    data = request.get_json()
+    title = data.get('titel')
+    text_list = mg.select_text({'titel': title}, {'date': 0, '_id': 0, 'label': 0, 'class': 0, 'user': 0})
+    return jsonify({"code": Http_status.http_status_ok, "contentHtml": text_list[0], })
+
+
+@article_manage.route("/wz/edit/update", methods=['POST'])
+@jwt_required()
+@check_token
 def text_edit():
     data = request.get_json()
-    pass
+    title = data.get('title')
+    content = data.get('text')
+    if not mg.update_text({'titel': title}, content):
+        svc_log_err(f"not have the title --> [{title}]")
+        return jsonify({"code": Http_status.http_status_server_err, "msg": "更新失败"})
+    return jsonify({"code": Http_status.http_status_ok, "msg": "更新成功"})
 
 
 @article_manage.route("/wz/s", methods=['POST'])
+@jwt_required()
+@check_token
 def text_search():
     data = request.get_json()
     search_name = data.get('searchTxt')
@@ -121,6 +151,8 @@ def text_search():
 
 
 @article_manage.route("/wz/class/w", methods=['POST'])
+@jwt_required()
+@check_token
 def class_set():
     data = request.get_json()
     class_name = data.get('class')
@@ -133,6 +165,8 @@ def class_set():
 
 
 @article_manage.route("/wz/class/r")
+@jwt_required()
+@check_token
 def class_read():
     rel = mg.select_all_class({'_id': 0})
     deep_copy_rel_list = copy.deepcopy(rel)
@@ -142,10 +176,17 @@ def class_read():
             if c['class'] == d['class']:
                 d.update({'num': class_num})
                 break
-    return jsonify({"code": Http_status.http_status_ok, "classList": deep_copy_rel_list})
+    pagesize = int(request.args.get('pagesize', 5))
+    pagenum = int(request.args.get('pagenum', 1))
+    start_index = (pagenum - 1) * pagesize
+    end_index = start_index + pagesize
+    paginated_class = deep_copy_rel_list[start_index:end_index]
+    return jsonify({"code": Http_status.http_status_ok, "classList": paginated_class, "total": len(deep_copy_rel_list)})
 
 
 @article_manage.route("/wz/class/show")
+@jwt_required()
+@check_token
 def class_show():
     class_list = list()
     rel = mg.select_all_class({'_id': 0, 'date': 0})
@@ -159,6 +200,8 @@ def class_show():
 
 
 @article_manage.route("/wz/class/screen", methods=['POST'])
+@jwt_required()
+@check_token
 def class_screen():
     data = request.get_json()
     class_name = data.get('class')
@@ -167,6 +210,8 @@ def class_screen():
 
 
 @article_manage.route("/wz/class/d", methods=['DELETE'])
+@jwt_required()
+@check_token
 def class_delete():
     data = request.get_json()
     class_name = data.get('class')
@@ -179,6 +224,8 @@ def class_delete():
 
 
 @article_manage.route("/wz/label/w", methods=['POST'])
+@jwt_required()
+@check_token
 def label_set():
     data = request.get_json()
     label_name = data.get('label')
@@ -191,6 +238,8 @@ def label_set():
 
 
 @article_manage.route("/wz/label/r")
+@jwt_required()
+@check_token
 def label_read():
     rel = mg.select_all_label({'_id': 0})
     deep_copy_rel_list = copy.deepcopy(rel)
@@ -200,10 +249,17 @@ def label_read():
             if c['label'] == d['label']:
                 d.update({'num': label_num})
                 break
-    return jsonify({"code": Http_status.http_status_ok, "labelList": deep_copy_rel_list})
+    pagesize = int(request.args.get('pagesize', 5))
+    pagenum = int(request.args.get('pagenum', 1))
+    start_index = (pagenum - 1) * pagesize
+    end_index = start_index + pagesize
+    paginated_label = deep_copy_rel_list[start_index:end_index]
+    return jsonify({"code": Http_status.http_status_ok, "labelList": paginated_label, "total": len(deep_copy_rel_list)})
 
 
 @article_manage.route("/wz/label/show")
+@jwt_required()
+@check_token
 def label_show():
     label_list = list()
     rel = mg.select_all_label({'_id': 0, 'date': 0})
@@ -217,6 +273,8 @@ def label_show():
 
 
 @article_manage.route("/wz/label/d", methods=['DELETE'])
+@jwt_required()
+@check_token
 def label_delete():
     data = request.get_json()
     label_name = data.get('label')
@@ -229,12 +287,21 @@ def label_delete():
 
 
 @article_manage.route("/wz/recovery/r")
+@jwt_required()
+@check_token
 def recovery_read():
     rel = mg.select_recovery_text({}, {'text': 0, '_id': 0})
-    return jsonify({"code": Http_status.http_status_ok, "recover_list": rel, "num": len(rel)})
+    pagesize = int(request.args.get('pagesize', 10))
+    pagenum = int(request.args.get('pagenum', 1))
+    start_index = (pagenum - 1) * pagesize
+    end_index = start_index + pagesize
+    paginated_rec = rel[start_index:end_index]
+    return jsonify({"code": Http_status.http_status_ok, "recover_list": paginated_rec, "num": len(rel)})
 
 
 @article_manage.route("/wz/recovery/d", methods=['DELETE'])
+@jwt_required()
+@check_token
 def recovery_delete():
     data = request.get_json()
     titel_name = data.get('titel')
@@ -244,6 +311,8 @@ def recovery_delete():
 
 
 @article_manage.route("/wz/recovery/c", methods=['POST'])
+@jwt_required()
+@check_token
 def recovery_revoke():
     content_list = []
     data = request.get_json()
@@ -251,7 +320,6 @@ def recovery_revoke():
     text_list = mg.select_recovery_text({'titel': title_name}, {'_id': 0, 'date': 0, })
     for k in text_list[0]:
         content_list.append(text_list[0][k])
-    print(content_list)
     if not mg.insert_text(content_list[0], content_list[1], content_list[2], content_list[3], content_list[4]):
         return jsonify({"code": Http_status.http_status_server_err, "msg": "撤消失败"})
     if not mg.delete_recovery_text(title_name):
