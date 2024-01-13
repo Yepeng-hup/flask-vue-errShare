@@ -288,7 +288,8 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
           const router = useRouter();
 
           function showALLUserInfo(){
-            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            console.log(localStorage.getItem('userToken'))
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
@@ -301,7 +302,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
           }
 
           const searchUser=()=>{
-            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
@@ -343,7 +344,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
           //新建用户获取弹窗表单数据
           const confirms=(formData)=>{
-            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
@@ -419,7 +420,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
           //编辑
           const confirms1=(formData1)=>{
-            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
@@ -459,7 +460,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
           // 修改密码
           const confirms2=(fromPwd)=>{
-            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
@@ -497,7 +498,7 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
 
           const deleteUser=row=>{
-              if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == "nill"){
+              if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
                 }  
