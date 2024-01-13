@@ -9,7 +9,7 @@ from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
 from view.adm.admin import admin
 from view.adm.data import data
-from model.secure.pwd import Pwd_encryption_decrypt
+from api.private import private
 
 app = Flask(__name__)
 i = Inits()
@@ -27,18 +27,17 @@ app.register_blueprint(user_manage)
 app.register_blueprint(admin)
 app.register_blueprint(article_manage)
 app.register_blueprint(data)
+app.register_blueprint(private)
 jwt = JWTManager(app)
-
-p = Pwd_encryption_decrypt()
 
 
 def clogo():
-    print("===========================================================")
-    print("==                                                       ==")
-    print("==            欢迎使用errShare技术错误分享平台                ==")
-    print("==  github: https://github.com/Yepeng-hup/errShare.git   ==")
-    print("==                                                       ==")
-    print("===========================================================")
+    print("====================================================================")
+    print("==                                                                ==")
+    print("==   Welcome to the errShare technology error sharing platform    ==")
+    print("==  github: https://github.com/Yepeng-hup/flask-vue-errShare.git  ==")
+    print("==                                                                ==")
+    print("====================================================================")
 
 
 if __name__ == "__main__":
