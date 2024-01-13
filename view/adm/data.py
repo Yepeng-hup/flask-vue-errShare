@@ -1,11 +1,13 @@
 from flask import Blueprint, jsonify, request
 import traceback
 import copy
+from flask_jwt_extended import jwt_required
 
 from model.mongo.mgMode import Mg_mode
 from core.httpStatus import Http_status
 from core.utils.utils import check_network_status, check_localhost_site, check_server_status
 from core.conf import mg_host, mg_port, fk_host, fk_port, fk_ssl_type
+from core.utils.utils import check_token
 from core.svclog import svc_log_err
 
 data = Blueprint("data", __name__)
@@ -13,6 +15,8 @@ mg = Mg_mode()
 
 
 @data.route("/info/l")
+@jwt_required()
+@check_token
 def show_login_info():
     try:
         login_info_list = mg.select_login_info()
@@ -23,6 +27,8 @@ def show_login_info():
 
 
 @data.route("/check", methods=['POST'])
+@jwt_required()
+@check_token
 def check_all():
     data = request.get_json()
     action = data.get('action')
@@ -52,6 +58,8 @@ def check_all():
 
 
 @data.route("/pic/data")
+@jwt_required()
+@check_token
 def show_all_picture():
     rel = mg.select_all_class({'_id': 0, 'date': 0, })
     deep_copy_rel_list = copy.deepcopy(rel)
