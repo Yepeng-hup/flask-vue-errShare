@@ -1,12 +1,15 @@
 ---
+# flask-vue-errshare
 errshare:
     ip: 127.0.0.1
     port: 8088
+    ssl_type: "http"
     upload_ip_domain: 127.0.0.1
-    debug: True
+    debug: False
 mongodb:
-    ip: 192.168.87.128
-    port: 6700
+    ip: 127.0.0.1
+    port: 27000
     db_name: "errshare"
-    db_user: "root"
+    db_user: "test"
     db_password: "123"
+
