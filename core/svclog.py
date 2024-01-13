@@ -1,4 +1,3 @@
-from flask import request
 from datetime import datetime
 
 current_time = datetime.now()
