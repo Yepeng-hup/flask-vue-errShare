@@ -1,9 +1,12 @@
 from flask import Blueprint, jsonify, render_template, request
 import re
+import os
 
 from model.secure.pwd import Pwd_encryption_decrypt
 from core.svclog import svc_log_info
 from model.mongo.mgMode import Mg_mode
+from core.utils.utils import access_limit
+from core.conf import fk_limit_second, fk_limit_number
 
 
 admin = Blueprint("admin", __name__)
@@ -16,7 +19,8 @@ def tests():
     return jsonify({"code": 200})
 
 
-@admin.route("/documents/select/<file_name>")
+@admin.route("/documents/select/<file_name>", endpoint="read_send_content")
+@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="read_send_content")
 def read_send_content(file_name):
     svc_log_info(f"cat file title [{file_name}]")
     all_class = mg.select_all_class({'_id': 0, 'date': 0})
@@ -24,7 +28,8 @@ def read_send_content(file_name):
     return render_template("front/content.html", content_list=content, all_class_list=all_class)
 
 
-@admin.route("/search", methods=['POST'])
+@admin.route("/search", methods=['POST'], endpoint="admin_search")
+@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="admin_search")
 def admin_search():
     search_text = request.form['searchText']
     all_class = mg.select_all_class({'_id': 0, 'date': 0})
@@ -33,7 +38,8 @@ def admin_search():
     return render_template("front/index.html", text_list=text_list, all_class_list=all_class)
 
 
-@admin.route("/choose/<classs>")
+@admin.route("/choose/<classs>", endpoint="admin_choose")
+@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="admin_choose")
 def admin_choose(classs):
     text_list = mg.select_text({'class': classs}, {'text': 0, '_id': 0})
     all_class = mg.select_all_class({'_id': 0, 'date': 0})
@@ -41,7 +47,8 @@ def admin_choose(classs):
     return render_template("front/index.html", text_list=text_list, all_class_list=all_class)
 
 
-@admin.route("/index")
+@admin.route("/index", endpoint="admin_index")
+@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="admin_index")   # 限制10秒内最多只能调用4次
 def admin_index():
     text_list = mg.select_text({}, {'text': 0, '_id': 0})
     all_class = mg.select_all_class({'_id': 0, 'date': 0})

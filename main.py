@@ -3,7 +3,11 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import datetime
 
-from core.conf import fk_host, fk_port, fk_debug
+from core.conf import fk_host, fk_port, fk_debug, \
+    fk_jwt_secret_key, \
+    fk_jwt_token_expires_time, \
+    fk_secret_key, \
+    fk_timezone
 from core.init import Inits
 from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
@@ -12,21 +16,17 @@ from view.adm.data import data
 
 app = Flask(__name__)
 i = Inits()
-
-# 前端请求跨域
-CORS(app)
-
-# 这个key要定义成变量
-app.secret_key = 'ertyuiplbcvrtRTYssa345oplyt'
-app.config['JWT_SECRET_KEY'] = 'errShare123321qawsedrftgyhnbvcAXFBJK'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=24)
+CORS(app)  # 前端请求跨域
+app.secret_key = fk_secret_key
+app.config['JWT_SECRET_KEY'] = fk_jwt_secret_key
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=fk_jwt_token_expires_time)
 app.config['JSON_AS_ASCII'] = False
-app.config['SCHEDULER_TIMEZONE'] = 'Asia/Shanghai'
+app.config['SCHEDULER_TIMEZONE'] = fk_timezone
+jwt = JWTManager(app)
 app.register_blueprint(user_manage)
 app.register_blueprint(admin)
 app.register_blueprint(article_manage)
 app.register_blueprint(data)
-jwt = JWTManager(app)
 
 
 def clogo():
