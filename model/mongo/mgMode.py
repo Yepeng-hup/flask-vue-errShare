@@ -178,6 +178,14 @@ class Mg_mode(object):
             login_info_list.append(result)
         return login_info_list
 
+    def select_login_user(self, term0, term1) -> list:
+        login_username = []
+        rel = mg_col_es_login_info.find(term0, term1).limit(500)
+        for i in rel:
+            login_username.append(i['user'])
+        return login_username
+
+
     def update_text(self, term, content) -> bool:
         new_update_value = {"$set": {"text": content}}
         rel = mg_col_es_text.update_one(term, new_update_value)

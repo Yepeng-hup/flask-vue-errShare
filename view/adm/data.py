@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 import traceback
 import copy
 from flask_jwt_extended import jwt_required
+from collections import Counter
 
 from model.mongo.mgMode import Mg_mode
 from core.httpStatus import Http_status
@@ -73,3 +74,16 @@ def show_all_picture():
     num_list = [d["num"] for d in deep_copy_rel_list]
     class_list = [d["class"] for d in deep_copy_rel_list]
     return jsonify({"code": Http_status.http_status_ok, "num_list": num_list, "class_list": class_list})
+
+
+@data.route("/user/data/pic")
+@jwt_required()
+@check_token
+def show_user_login_pic():
+    login_username_list = mg.select_login_user({}, {'_id': 0, 'date': 0, })
+    name_counts = Counter(login_username_list)
+    username_num_list = list(name_counts.values())
+    username_list = list(name_counts.keys())
+    return jsonify({"code": Http_status.http_status_ok, "username_num_list": username_num_list, "username_list": username_list, })
+
+
