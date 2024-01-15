@@ -1,11 +1,18 @@
 ---
-# flask-vue-errshare
+# flask-vue-errshare config
 errshare:
-    ip: 127.0.0.1
+    ip: 192.168.1.119
     port: 8088
-    ssl_type: "http"
-    upload_ip_domain: 127.0.0.1
+    ssl_type: "http"    # http/https
+    upload_ip_domain: 192.168.1.119
     debug: False
+    limit_start: "NO"   # YES/NO 是否开启限流
+    limit_second: 10
+    limit_number: 5
+    secret_key: "ertyuiplbcvrtRTYssa345oplyt"
+    jwt_secret_key: "errShare123321qawsedrftgyhnbvcAXFBJK"
+    jwt_token_expires_time: 24  # 小时
+    timezone: "Asia/Shanghai"   # 时区
 mongodb:
     ip: 127.0.0.1
     port: 27000
