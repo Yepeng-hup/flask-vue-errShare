@@ -1,5 +1,15 @@
 # errshare_ui
 
+## Project version
+
+```
+node -> v18.19.0
+vue-cli -> v5.0.8
+npm -> v10.2.0
+```
+
+
+
 ## Project setup
 ```
 npm install

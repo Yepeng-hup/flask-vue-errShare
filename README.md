@@ -1,1 +1,11 @@
-# flask-vue-errShare is an error collection website written in Python+vue3+MongoDB+docker, currently under development...
+# flask-vue-errShare
+
+版本：python3.7
+
+### 部署
+
+```
+cd flask-vue-errShare
+python main.py
+```
+
