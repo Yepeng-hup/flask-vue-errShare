@@ -105,6 +105,7 @@
   import { ElMessage } from 'element-plus'
   import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
   import '@wangeditor/editor/dist/css/style.css'
+  import { useRouter} from "vue-router";
   import {showArticleGet, showWzClassGet, screenClassPost, searchContentPost, delTextDelete, editContentPost, updateContentPost} from "@/utils/apis"
 
   export default {
@@ -132,6 +133,7 @@
           const editorRef = shallowRef()
           const toolbarConfig = {}
           const editorConfig = { MENU_CONF: {} }
+          const router = useRouter();
 
           onBeforeUnmount(() => {
               const editor = editorRef.value
@@ -146,7 +148,7 @@
 
         editorConfig.MENU_CONF["uploadImage"] = {
                   server: `${iUrl}/wz/upload/images`,
-                  // headers: { Authorization: 'token' },
+                  headers: { Authorization: 'Bearer '+ localStorage.getItem('userToken') },
                   fieldName: 'file',
                   maxFileSize: 10 * 1024 * 1024,
                   maxNumberOfFiles: 10,
@@ -156,7 +158,7 @@
 
         editorConfig.MENU_CONF["uploadVideo"] = {
                   server: `${iUrl}/wz/upload/video`,
-                  // headers: { Authorization: 'token' },
+                  headers: { Authorization: 'Bearer '+ localStorage.getItem('userToken') },
                   fieldName: 'video',
                   maxFileSize: 1024 * 1024 * 1024,
                   timeout: 120 * 1000,
@@ -164,6 +166,10 @@
 
 
         function showAllArticle(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           showArticleGet(data.searchParams).then(
             res => {
               data.wzInfoList=res.wzList
@@ -184,6 +190,10 @@
         }
 
         function screenClass(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           screenClassPost({"class": data.classValue}).then(
             res => {
               data.wzInfoList=res.wz_list
@@ -194,6 +204,10 @@
         }
 
         function searchArticle(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           searchContentPost({"searchTxt": data.searchText}).then(
             res => {
               data.wzInfoList = res.wz_list
@@ -205,6 +219,10 @@
         }
 
         const recoveryArticle=row=>{
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
               const {titel} = row 
               delTextDelete({"titel": titel}).then(
                     res => {
@@ -232,12 +250,20 @@
           }
 
           const catArticle=row=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
               const {titel} = row
               const url = process.env.VUE_APP_SERVER_HOST
               window.open(`${url}/documents/select/${titel}`, '_blank');
           }
 
           const picFY=()=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
             showArticleGet(data.searchParams).then(
                   res => {
                     data.wzInfoList=res.wzList
@@ -251,6 +277,10 @@
           }
 
           function editArticle(text){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
               editContentPost(text).then(
               res => {
                 data.dialogFormVisible=true
@@ -260,6 +290,10 @@
           }
 
          function updateContent(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
                       updateContentPost({"text": data.contentHtml.text, "title": data.contentHtml.titel}).then(
                           res => {
                               data.dialogFormVisible = false

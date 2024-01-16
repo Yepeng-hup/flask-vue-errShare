@@ -1,19 +1,6 @@
 import {post, get, del} from "./axiosPlus"
 
-// test 
-export const testPost = data=>{
-    return post(
-        {
-            url: "/test",
-            data
-        }
-    )
-}
 
-
-
-
-//每个请求封装成单个函数
 // ############################## user #####################################
 export const showUserGet = data=>{
     
@@ -68,6 +55,15 @@ export const updateUserPwdPost = data=>{
     return post(
         {
             url: "/user/update/passwd",
+            data
+        }
+    )
+}
+
+export const getUserDataGet = data=>{
+    return get(
+        {
+            url: "/user/data/pic",
             data
         }
     )
@@ -276,5 +272,6 @@ export const getDataGet = data=>{
         }
     )
 }
+
 
 

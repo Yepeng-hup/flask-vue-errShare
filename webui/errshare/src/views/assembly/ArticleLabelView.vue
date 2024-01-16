@@ -39,6 +39,7 @@
   import {reactive, toRefs} from "vue"
   import {Delete,} from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
+  import { useRouter} from "vue-router";
   import {addLabelPost, getLabelGet, delLabelDelete} from "@/utils/apis"
 
 
@@ -56,11 +57,17 @@
           total: 0,
         })
 
+        const router = useRouter();
+
         function rest(){
           data.labelName = ''
         }
 
         function showAllLabel(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           getLabelGet(data.searchParams).then(
             res => {
               data.labelInfoList=res.labelList
@@ -72,6 +79,10 @@
 
 
         function addLabel(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           addLabelPost(
           {
             "label": data.labelName,
@@ -102,6 +113,10 @@
       }
 
       const deleteLabel=row=>{
+        if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
         delLabelDelete({"label": row.label}).then(
                     res => {
                         showAllLabel()
@@ -128,6 +143,10 @@
           }
 
           const labelFY=()=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
             getLabelGet(data.searchParams).then(
                   res => {
                     data.labelInfoList=res.labelList

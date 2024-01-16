@@ -41,8 +41,15 @@ export default {
         //     data.pwd = ''
         // }
 
+        // function f5(){
+        //   window.location.reload();
+        // }
+      
+
+        const baseURL = process.env.VUE_APP_SERVER_HOST;
+
         const login = ()=>{
-          axios.post('http://192.168.1.119:8088/err/login', {
+          axios.post(`${baseURL}/err/login`, {
             "username": data.user, 
             "password": data.pwd,
             })  
@@ -50,7 +57,7 @@ export default {
               if (res.data.code == 200){
                       router.push(
                           {
-                              name: 'layout', 
+                              name: 'layout',
                               // query: {
                               //         u: res.data.username,
                               //         r: res.data.role,

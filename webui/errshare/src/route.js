@@ -1,5 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
+// function checkRole(roleName){
+//     console.log(roleName)
+//     if (roleName == 'admin') {
+//         return '/home'
+//     }else {
+//         return '/wz/pic'
+//     }
+// }
 
 
 const routes = [
@@ -13,8 +21,8 @@ const routes = [
         path: "/errshare",
         name: "layout",
         component: () => import("./views/layout/LayoutView.vue"),
-        // 重定向至home
-        redirect: "/home",
+        // 重定向
+        redirect: '/home',
         children: [
             {path: "/home", component: () => import("./views/assembly/HomeView.vue"), name: "HomeView"}, 
             {path: "/user/create", component: () => import("./views/assembly/UserCreateView.vue"), name: "UserCreateView"},

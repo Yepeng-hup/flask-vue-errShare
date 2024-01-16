@@ -40,6 +40,7 @@
     import {reactive, toRefs} from "vue"
     import {getRecoveryInfoGet, delRecDelete, revokeRecPost} from "@/utils/apis"
     import { ElMessage } from 'element-plus'
+    import { useRouter} from "vue-router";
 
     export default {
       name: "recoveryView",
@@ -54,7 +55,13 @@
               },
         })
 
+        const router = useRouter();
+
         function showRecInfo(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           getRecoveryInfoGet(data.searchParams).then(
             res => {
               data.wzInfoList = res.recover_list
@@ -67,6 +74,10 @@
         showRecInfo()
 
         const recoveryDelete=row=>{
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
               const {titel} = row 
               delRecDelete({"titel": titel}).then(
                     res => {
@@ -95,6 +106,10 @@
 
 
           const revoke = row =>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
             revokeRecPost({"titel": row.titel}).then(
                     res => {
                         showRecInfo()
@@ -121,6 +136,10 @@
         
 
           const recFY=()=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
             getRecoveryInfoGet(data.searchParams).then(
                   res => {
                     data.wzInfoList = res.recover_list

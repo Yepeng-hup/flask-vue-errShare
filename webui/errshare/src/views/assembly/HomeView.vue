@@ -23,6 +23,8 @@
               <el-table-column prop="UsageRate" label="使用率"/>
           </el-table>
         </ul>
+        <el-divider border-style="dashed" />
+        <div id="userpic" style="width: auto; height: 300px;"></div>
       </div>
     </el-col>
 
@@ -44,7 +46,8 @@
   
 <script>
 import { reactive, toRefs } from 'vue'
-import {getLoginInfoGet, checkAllPost} from "@/utils/apis"
+import {getLoginInfoGet, checkAllPost, getUserDataGet} from "@/utils/apis"
+import { useRouter} from "vue-router";
 import { ElMessage } from 'element-plus'
 
   export default {
@@ -58,7 +61,13 @@ import { ElMessage } from 'element-plus'
 
     })
 
+    const router = useRouter();
+
       function showLoginInfo(){
+        if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
           getLoginInfoGet().then(
             res => {
               data.loginInfoList = res.login_info_list
@@ -69,6 +78,10 @@ import { ElMessage } from 'element-plus'
       showLoginInfo()
 
       function checkAll(s){
+        if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
         checkAllPost(
           {
             "action": s,
@@ -101,6 +114,10 @@ import { ElMessage } from 'element-plus'
       }
 
       function checkDisk(s){
+        if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
         checkAllPost(
           {
             "action": s,
@@ -112,15 +129,57 @@ import { ElMessage } from 'element-plus'
           )
       }
 
+
       return {
         ...toRefs(data),
         checkAll,
         checkDisk,
       }
-    }
+    },
+
+    mounted() {
+          const router = useRouter();
+          let d01 = this.$echarts.init(document.getElementById("userpic"));
+
+          function showDataD01(){
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                          router.push({ name: 'loginView' });
+                          return
+                      }
+            getUserDataGet().then(res => {
+              let xaxisData = res.username_list;
+              let seriesData = res.username_num_list;
+
+              d01.setOption({
+                title: { text: "TOP500登录次数图" },
+                tooltip: {},
+                xAxis: {
+                  data: xaxisData,
+                },
+                yAxis: {},
+                series: [
+                  {
+                    name: "次数量",
+                    type: "bar",
+                    data: seriesData,
+                    itemStyle: {
+                          color: function(params) {
+                              if (params.value > 100) {
+                                  return 'red';
+                              }else if (params.value > 50){
+                                  return 'yellow'
+                              }else {
+                                  return 'green';
+                              }
+                          }
+                      }
+                  },
+                ],
+              });
+            });
+          }
+
+          showDataD01();
+    },
   }
 </script>
-
-<style scoped>
-
-</style>

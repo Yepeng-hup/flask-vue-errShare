@@ -288,7 +288,6 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
           const router = useRouter();
 
           function showALLUserInfo(){
-            console.log(localStorage.getItem('userToken'))
             if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
                     router.push({ name: 'loginView' });
                     return
@@ -529,7 +528,6 @@ import {createUserPost, showUserGet, updateUserPost, delUserDelete, searchUserGe
 
           }
 
-          //浏览器访问时，实时获取页面所有数据
           showALLUserInfo()
 
           const userFY=()=>{

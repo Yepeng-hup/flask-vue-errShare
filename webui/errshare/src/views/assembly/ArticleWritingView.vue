@@ -53,6 +53,7 @@ import '@wangeditor/editor/dist/css/style.css'
 import { onBeforeUnmount, ref, shallowRef, reactive, toRefs} from 'vue'
 import { ElMessage } from 'element-plus'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import { useRouter} from "vue-router";
 import {showWzClassGet, contentWritePost, showWzLabelGet} from '@/utils/apis'
 
 export default {
@@ -68,8 +69,13 @@ export default {
     const classValue = ref('')
     const labelValue = ref('')
     const titleTxt = ref('')
+    const router = useRouter();
 
     function getAllData(){
+      if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
         showWzClassGet().then(
           res => {
                     data.classList=res.wz_class            
@@ -112,6 +118,10 @@ export default {
     }
 
     function getAllcontent(){
+      if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                }
       contentWritePost(
           {
             "user": localStorage.getItem('user'),

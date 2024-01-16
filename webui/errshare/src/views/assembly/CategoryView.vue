@@ -41,6 +41,7 @@
   import {reactive, toRefs} from "vue"
   import {Delete,} from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
+  import { useRouter} from "vue-router";
   import {getClassGet, addClassPost, delClassDelete} from "@/utils/apis"
 
     export default {
@@ -57,11 +58,17 @@
           total: 0,
         })
 
+        const router = useRouter();
+
         function rest(){
           data.className = ''
         }
 
         function showAllClass(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                } 
           getClassGet(data.searchParams).then(
             res => {
               data.classInfoList=res.classList
@@ -72,6 +79,10 @@
         showAllClass()
 
         function addClass(){
+          if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                } 
           addClassPost(
           {
             "class": data.className,
@@ -102,6 +113,10 @@
         }
 
       const deleteClass=row=>{
+        if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                } 
               delClassDelete({"class": row.class}).then(
                     res => {
                         showAllClass()
@@ -129,6 +144,10 @@
 
 
           const classFY=()=>{
+            if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null){
+                    router.push({ name: 'loginView' });
+                    return
+                } 
             getClassGet(data.searchParams).then(
                   res => {
                         data.classInfoList=res.classList

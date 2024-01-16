@@ -15,7 +15,6 @@
                   :collapse-transition="false"
                   :router="true"
                 >
-                <!-- 伸缩后可以直接隐藏字符 -->
                 <div v-if="str" style="padding: 15px; color: #ffffff">
                   <h2>errShare</h2>
                 </div>
@@ -48,7 +47,7 @@
                     <span>数据表盘</span>
                   </el-menu-item>
 
-                  <el-menu-item index="5" :route="{name: 'RecoveryView'}">
+                  <el-menu-item v-if="showRecManagement" index="5" :route="{name: 'RecoveryView'}">
                     <el-icon><Delete /></el-icon>
                     <span>回收站</span>
                   </el-menu-item>
@@ -110,6 +109,7 @@
 
       const iszt = ref(false);
       const showUserManagement = ref(false);
+      const showRecManagement = ref(false);
       const showArticleManagement = ref(true);
       const title = ref("");
       const str = ref(true);
@@ -128,15 +128,15 @@
             title.value = userName;
             
             if (roleName == "admin"){
-                const userData = { isAdmin: true };
-                showUserManagement.value = userData.isAdmin;
-                showArticleManagement.value = userData.isAdmin;
+                showUserManagement.value = true;
+                showArticleManagement.value = true;
+                showRecManagement.value = true;
             } else if (roleName == "ordinary"){
-                const userData = { isAdmin: false };
-                const articleData = { isAdmin: true };
-                showUserManagement.value = userData.isAdmin;
-                showArticleManagement.value = articleData.isAdmin;
-
+                // const userData = { isAdmin: false };
+                // const articleData = { isAdmin: true };
+                showUserManagement.value = false;
+                showArticleManagement.value = true;
+                showRecManagement.value = false;
             }else {
               const xx = "view"
               console.log(xx)
@@ -161,8 +161,10 @@
         serverIndexUrl: siteUrl + "/index",
         showUserManagement,
         showArticleManagement,
+        showRecManagement,
         loginout,
         str,
+
       }
     }
   
