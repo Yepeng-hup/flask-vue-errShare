@@ -53,7 +53,7 @@ def admin_choose(classs):
 
 
 @admin.route("/index", endpoint="admin_index")
-@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="admin_index")   # 限制10秒内最多只能调用4次
+@access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="admin_index")
 def admin_index():
     text_list = mg.select_text({}, {'text': 0, '_id': 0})
     all_class = mg.select_all_class({'_id': 0, 'date': 0})
