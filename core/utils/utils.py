@@ -5,8 +5,12 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity
 import psutil
 import time
+import re
+import os
+import traceback
+from bs4 import BeautifulSoup
 
-from core.svclog import svc_log_err
+from core.svclog import svc_log_err, svc_log_info
 from core.httpStatus import Http_status
 from core.conf import fk_limit_start
 
@@ -78,6 +82,63 @@ def create_token(user_name) -> str:
     return access_token
 
 
+# delete img
+def delete_not_text_img(html_content):
+    img_del_src_list = []
+    img_del_name_lsit = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    # 获取img标签中的src元素值
+    images = soup.find_all('img')
+    for img in images:
+        src = img['src']
+        img_del_src_list.append(src)
+
+    for i in img_del_src_list:
+        result = re.search(r'/([^/]+)$', i)
+        if result:
+            img_name = result.group(1)
+            img_del_name_lsit.append(img_name)
+        else:
+            pass
+
+    if len(img_del_name_lsit) >= 1:
+        for n in img_del_name_lsit:
+            try:
+                os.remove("./static/upload/images/" + n)
+                svc_log_info(f"delete images ok -> [{n}]")
+            except:
+                svc_log_err(f"delete images fail -> [{n}]")
+                print(traceback.format_exc())
+    return
+
+
+def delete_not_text_video(html_content):
+    video_del_src_list = []
+    video_del_name_lsit = []
+    soup = BeautifulSoup(html_content, 'html.parser')
+    videos = soup.find_all('source')
+    for video in videos:
+        src = video['src']
+        video_del_src_list.append(src)
+
+    for i in video_del_src_list:
+        result = re.search(r'/([^/]+)$', i)
+        if result:
+            video_name = result.group(1)
+            video_del_name_lsit.append(video_name)
+        else:
+            pass
+
+    if len(video_del_name_lsit) >= 1:
+        for n in video_del_name_lsit:
+            try:
+                os.remove("./static/upload/video/" + n)
+                svc_log_info(f"delete video ok -> [{n}]")
+            except:
+                svc_log_err(f"delete video fail -> [{n}]")
+                print(traceback.format_exc())
+    return
+
 
 # ######################## 装饰器 #########################
 
@@ -94,30 +155,29 @@ def check_token(func):
 
 
 def access_limit(max_calls, period, api_name=None):
-        def decorator(func):
-                call_times = []
+    def decorator(func):
+        call_times = []
 
-                def wrapper(*args, **kwargs):
-                    if fk_limit_start == "YES":
-                        current_time = time.time()
-                        call_times.append(current_time)
-                        # 移除超时窗口的调用时间
-                        call_times[:] = [t for t in call_times if t > current_time - period]
-                        if len(call_times) > max_calls:
-                            svc_log_err(f"API [{api_name}] calls exceeded limit, please try again later.")
-                            return jsonify(
-                                {
-                                    "code": Http_status.http_status_server_err,
-                                    "status": "error",
-                                    "msg": "Frequent visits, retry after 3 seconds.",
-                                }
-                            )
-                        else:
-                            return func(*args, **kwargs)
-                    else:
-                        return func(*args, **kwargs)
+        def wrapper(*args, **kwargs):
+            if fk_limit_start == "YES":
+                current_time = time.time()
+                call_times.append(current_time)
+                # 移除超时窗口的调用时间
+                call_times[:] = [t for t in call_times if t > current_time - period]
+                if len(call_times) > max_calls:
+                    svc_log_err(f"API [{api_name}] calls exceeded limit, please try again later.")
+                    return jsonify(
+                        {
+                            "code": Http_status.http_status_server_err,
+                            "status": "error",
+                            "msg": "Frequent visits, retry after 3 seconds.",
+                        }
+                    )
+                else:
+                    return func(*args, **kwargs)
+            else:
+                return func(*args, **kwargs)
 
-                return wrapper
+        return wrapper
 
-        return decorator
-
+    return decorator

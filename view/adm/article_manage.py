@@ -10,6 +10,7 @@ from core.conf import fk_upload_ip_domain, fk_port
 from core.httpStatus import Http_status
 from core.svclog import svc_log_err
 
+
 article_manage = Blueprint("article_manage", __name__)
 mg = Mg_mode()
 

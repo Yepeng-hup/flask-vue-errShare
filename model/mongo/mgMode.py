@@ -4,6 +4,7 @@ from pymongo import DESCENDING
 
 from .mongo import mg_col_es_text, mg_col_es_class, mg_col_es_label, mg_col_es_recovery, mg_col_es_login_info
 from core.svclog import svc_log_info
+from core.utils.utils import delete_not_text_img, delete_not_text_video
 
 
 class Mg_mode(object):
@@ -121,6 +122,10 @@ class Mg_mode(object):
     def delete_recovery_text(self, title) -> bool:
         #删除回收站里的数据，这里就是彻底删除了
         try:
+            r = mg_col_es_recovery.find({"titel": title}, {"text": 1})
+            text = r[0]['text']
+            delete_not_text_video(text)
+            delete_not_text_img(text)
             rel = mg_col_es_recovery.delete_one({"titel": title})
             if rel.acknowledged:
                 svc_log_info(f"delete recovery text success -> [{title}]")
