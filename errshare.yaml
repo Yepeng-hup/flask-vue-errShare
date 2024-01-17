@@ -13,10 +13,14 @@ errshare:
     jwt_secret_key: "errShare123321qawsedrftgyhnbvcAXFBJK"
     jwt_token_expires_time: 24  # 小时
     timezone: "Asia/Shanghai"   # 时区
+    search_not_str:
+        - ";"
+        - "@"
+        - "$"
 mongodb:
     ip: 127.0.0.1
-    port: 27000
+    port: 30000
     db_name: "errshare"
     db_user: "test"
-    db_password: "123"
+    db_password: "0997123456"
 
