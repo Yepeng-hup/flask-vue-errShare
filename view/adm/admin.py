@@ -40,7 +40,7 @@ def admin_search():
         text_list = mg.select_text({'titel': {"$regex": re.compile(search_text)}}, {'text': 0, '_id': 0})
         text_list.reverse()
         return render_template("front/index.html", text_list=text_list, all_class_list=all_class)
-    return render_template("front/index.html", text_list=[], all_class_list=all_class)
+    return render_template("front/index.html", text_list=[], all_class_list=all_class, info="error: search content illegality")
 
 
 @admin.route("/choose/<classs>", endpoint="admin_choose")
