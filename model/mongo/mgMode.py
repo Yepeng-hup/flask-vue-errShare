@@ -1,6 +1,7 @@
 from datetime import datetime
 import traceback
 from pymongo import DESCENDING
+import threading
 
 from .mongo import mg_col_es_text, mg_col_es_class, mg_col_es_label, mg_col_es_recovery, mg_col_es_login_info
 from core.svclog import svc_log_info
@@ -124,8 +125,10 @@ class Mg_mode(object):
         try:
             r = mg_col_es_recovery.find({"titel": title}, {"text": 1})
             text = r[0]['text']
-            delete_not_text_video(text)
-            delete_not_text_img(text)
+            thread01 = threading.Thread(target=delete_not_text_img, args=(text,))
+            thread02 = threading.Thread(target=delete_not_text_video, args=(text, ))
+            thread01.start()
+            thread02.start()
             rel = mg_col_es_recovery.delete_one({"titel": title})
             if rel.acknowledged:
                 svc_log_info(f"delete recovery text success -> [{title}]")
