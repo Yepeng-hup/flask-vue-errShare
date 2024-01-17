@@ -29,6 +29,7 @@ fk_secret_key = _svc.get("secret_key")
 fk_jwt_secret_key = _svc.get("jwt_secret_key")
 fk_jwt_token_expires_time = _svc.get("jwt_token_expires_time")
 fk_timezone = _svc.get("timezone")
+fk_search_not_str = _svc.get("search_not_str")
 
 _mongo = y.get("mongodb")
 mg_host = _mongo.get("ip")
