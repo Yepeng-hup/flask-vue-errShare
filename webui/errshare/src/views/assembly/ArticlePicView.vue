@@ -31,7 +31,7 @@
                 <el-table-column prop="titel" label="标题" width="250" />
                 <el-table-column prop="user" label="作者" width="100"/>
                 <el-table-column prop="class" label="分类" width="100"/>
-                <el-table-column prop="label" label="标签"/>
+                <el-table-column prop="label" label="标签" width="100"/>
                 <el-table-column prop="date" label="发布时间"/>
                 <el-table-column label="操作">
                     <template #default="scope">

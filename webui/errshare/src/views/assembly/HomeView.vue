@@ -3,7 +3,7 @@
 
     <el-col :span="12"><div class="grid-content ep-bg-purple" />
       <div style="background: #fff; border: 1px solid rgb(249, 244, 244);">
-        <h4 style="padding: 5px; color: #606266;">服务检测</h4>
+        <h4 style="padding: 5px;color: #606266;">服务检测</h4>
         <el-divider border-style="dashed" />
         <div style="padding: 10px;">
           <el-button type="success" @click="checkAll('mongoCheck')">mangodb检测</el-button>
