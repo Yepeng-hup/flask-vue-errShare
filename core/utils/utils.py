@@ -13,6 +13,9 @@ from bs4 import BeautifulSoup
 from core.svclog import svc_log_err, svc_log_info
 from core.httpStatus import Http_status
 from core.conf import fk_limit_start
+from model.sqlite.select import Select_tables
+
+s = Select_tables()
 
 
 # 传入列表套元组，转换为列表套字典
@@ -140,6 +143,13 @@ def delete_not_text_video(html_content):
     return
 
 
+def show_all_user_num() -> int:
+    rel = s.show_select_rel("SELECT username FROM users")
+    if len(rel) <= 0:
+        return 0
+    return len(rel)
+
+
 # ######################## 装饰器 #########################
 
 
@@ -181,3 +191,8 @@ def access_limit(max_calls, period, api_name=None):
         return wrapper
 
     return decorator
+
+
+def api_white_list(func):
+
+    pass
