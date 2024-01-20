@@ -52,7 +52,7 @@ def show_login_info():
                 "code": Http_status.http_status_server_err,
                 "login_info_list": [],
                 "poem": poem,
-                "user_num": user_num,
+                "user_num": 0,
             }
         )
 
