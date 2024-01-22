@@ -21,11 +21,11 @@ mg = Mg_mode()
 def wz_upload_images():
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
-    save_path = "static/upload/images/"
+    save_path = "upload/images/"
     images = request.files['file']
     if images:
         save_name = formatted_time + "-" + images.filename
-        url = "http://" + fk_upload_ip_domain + ":" + str(fk_port) + "/" + save_path + save_name
+        url = "http://" + fk_upload_ip_domain + ":" + str(fk_port) + "/files/" + save_name
         images.save(save_path + save_name)
         return jsonify({
             "errno": 0,
@@ -47,11 +47,11 @@ def wz_upload_images():
 def wz_upload_video():
     current_time = datetime.now()
     formatted_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
-    save_path = "static/upload/video/"
+    save_path = "upload/video/"
     video = request.files['video']
     if video:
         save_name = formatted_time + "-" + video.filename
-        url = "http://" + fk_upload_ip_domain + ":" + str(fk_port) + "/" + save_path + save_name
+        url = "http://" + fk_upload_ip_domain + ":" + str(fk_port) + "/videos/" + save_name
         video.save(save_path + save_name)
         return jsonify({
             "errno": 0,

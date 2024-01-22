@@ -107,7 +107,7 @@ def delete_not_text_img(html_content):
     if len(img_del_name_lsit) >= 1:
         for n in img_del_name_lsit:
             try:
-                os.remove("./static/upload/images/" + n)
+                os.remove("./upload/images/" + n)
                 svc_log_info(f"delete images ok -> [{n}]")
             except:
                 svc_log_err(f"delete images fail -> [{n}]")
@@ -135,7 +135,7 @@ def delete_not_text_video(html_content):
     if len(video_del_name_lsit) >= 1:
         for n in video_del_name_lsit:
             try:
-                os.remove("./static/upload/video/" + n)
+                os.remove("./upload/video/" + n)
                 svc_log_info(f"delete video ok -> [{n}]")
             except:
                 svc_log_err(f"delete video fail -> [{n}]")
@@ -192,7 +192,3 @@ def access_limit(max_calls, period, api_name=None):
 
     return decorator
 
-
-def api_white_list(func):
-
-    pass

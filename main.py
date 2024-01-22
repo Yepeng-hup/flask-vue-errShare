@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory, request, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 import datetime
@@ -7,16 +7,20 @@ from core.conf import fk_host, fk_port, fk_debug, \
     fk_jwt_secret_key, \
     fk_jwt_token_expires_time, \
     fk_secret_key, \
-    fk_timezone
+    fk_timezone, \
+    fk_file_video_acc_white
 from core.init import Inits
 from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
 from view.adm.admin import admin
 from view.adm.data import data
+from core.svclog import svc_log_warn
 
 app = Flask(__name__)
 i = Inits()
-CORS(app)  # 前端请求跨域
+IMG_FOLDER = 'upload/images'
+VIDEO_FOLDER = 'upload/video'
+CORS(app)
 app.secret_key = fk_secret_key
 app.config['JWT_SECRET_KEY'] = fk_jwt_secret_key
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(hours=fk_jwt_token_expires_time)
@@ -36,6 +40,26 @@ def clogo():
     print("==  github: https://github.com/Yepeng-hup/flask-vue-errShare.git  ==")
     print("==                                                                ==")
     print("====================================================================")
+
+
+@app.route('/files/<path:filename>')
+def protected_file(filename):
+    client_ip = request.remote_addr
+    if client_ip in fk_file_video_acc_white:
+        return send_from_directory(IMG_FOLDER, filename)
+    else:
+        svc_log_warn(f"error you don't have permission images -> [{client_ip}]")
+        return jsonify({"code": 404, "msg": "There is no such thing"})
+
+
+@app.route('/videos/<path:filename>')
+def protected_video(filename):
+    client_ip = request.remote_addr
+    if client_ip in fk_file_video_acc_white:
+        return send_from_directory(VIDEO_FOLDER, filename)
+    else:
+        svc_log_warn(f"error you don't have permission video -> [{client_ip}]")
+        return jsonify({"code": 404, "msg": "There is no such thing"})
 
 
 if __name__ == "__main__":
