@@ -1,12 +1,9 @@
-from flask import jsonify
 import traceback
 import sys
 
 from model.sqlite.sqlite import cursor
 from model.sqlite.select import Select_tables
 from core.svclog import svc_log_info, svc_log_err
-from core.httpStatus import Http_status
-from core.utils.utils import data_init
 from model.secure.pwd import Pwd_encryption_decrypt
 
 s = Select_tables()
@@ -43,8 +40,6 @@ def create_tables():
             #     print("create test")
             else:
                 pass
-    # 关闭连接
-    # conn.close()
     return
 
 
