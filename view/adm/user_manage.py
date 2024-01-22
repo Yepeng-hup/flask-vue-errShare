@@ -138,3 +138,10 @@ def update_user_pwd():
     except:
         print(traceback.format_exc())
         return jsonify({"code": Http_status.http_status_server_err, "msg": "修改失败"})
+
+
+@user_manage.route("/user/center")
+@jwt_required()
+@check_token
+def user_center():
+    pass
