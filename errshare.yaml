@@ -17,9 +17,12 @@ errshare:
         - ";"
         - "@"
         - "$"
+    file_video_acc_white:
+        - "127.0.0.1"
+        - "192.168.1.119"
 mongodb:
     ip: 127.0.0.1
-    port: 30000
+    port: 30002
     db_name: "errshare"
     db_user: "test"
     db_password: "0997123456"
