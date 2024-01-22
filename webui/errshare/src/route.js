@@ -1,14 +1,5 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-// function checkRole(roleName){
-//     console.log(roleName)
-//     if (roleName == 'admin') {
-//         return '/home'
-//     }else {
-//         return '/wz/pic'
-//     }
-// }
-
 
 const routes = [
     {
@@ -32,6 +23,7 @@ const routes = [
             {path: "/wz/label", component: () => import("./views/assembly/ArticleLabelView.vue"), name: "ArticleLabelView"},
             {path: "/data", component: () => import("./views/assembly/DataView.vue"), name: "DataView"},
             {path: "/recovery", component: () => import("./views/assembly/RecoveryView.vue"), name: "RecoveryView"},
+            {path: "/user/center", component: () => import("./views/assembly/UserCenterView.vue"), name: "UserCenterView"},
         ]
     },
     
