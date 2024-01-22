@@ -93,7 +93,8 @@ class Mg_mode(object):
             rel = mg_col_es_text.delete_one({"titel": titel})
             if rel.acknowledged:
                 svc_log_info(f"delete text success -> [{titel}]")
-            return True
+                return True
+            return False
         except:
             print(traceback.format_exc())
             return False
@@ -104,7 +105,8 @@ class Mg_mode(object):
             rel = mg_col_es_class.delete_one({"class": class_name})
             if rel.acknowledged:
                 svc_log_info(f"delete class success -> [{class_name}]")
-            return True
+                return True
+            return False
         except:
             print(traceback.format_exc())
             return False
@@ -115,7 +117,8 @@ class Mg_mode(object):
             rel = mg_col_es_label.delete_one({"label": label_name})
             if rel.acknowledged:
                 svc_log_info(f"delete label success -> [{label_name}]")
-            return True
+                return True
+            return False
         except:
             print(traceback.format_exc())
             return False
@@ -132,7 +135,18 @@ class Mg_mode(object):
             rel = mg_col_es_recovery.delete_one({"titel": title})
             if rel.acknowledged:
                 svc_log_info(f"delete recovery text success -> [{title}]")
-            return True
+                return True
+            return False
+        except:
+            print(traceback.format_exc())
+            return False
+
+    def delete_login_info(self, user) -> bool:
+        try:
+            rel = mg_col_es_login_info.delete_one({"user": user})
+            if rel.acknowledged:
+                return True
+            return False
         except:
             print(traceback.format_exc())
             return False

@@ -53,9 +53,11 @@ def create_user():
         hash_pwd = p.encryption(passwd1)
         cursor.execute("INSERT INTO users (username, role, password, phone, mailbox) VALUES (?, ?, ?, ?, ?)",
                        (username, role, hash_pwd, phone, mailbox))
+        svc_log_info(f"create user [{username}] ok")
         return jsonify({'code': Http_status.http_status_ok, "msg": "用户创建成功"})
     except:
         print(traceback.format_exc())
+        svc_log_err(f"create user [{username}] fail")
         return jsonify({'code': Http_status.http_status_server_err, "msg": "用户创建失败"})
 
 
@@ -90,9 +92,11 @@ def update_user():
     phone = data.get('phone')
     try:
         cursor.execute("UPDATE users SET role=? WHERE username=? AND phone=? ", (role, username, phone))
+        svc_log_info(f"update user role to [{role}] ok")
         return jsonify({"code": Http_status.http_status_ok, "msg": "修改成功"})
     except:
         print(traceback.format_exc())
+        svc_log_err(f"update user role to [{role}] fail")
         return jsonify({"code": Http_status.http_status_server_err, "msg": "修改失败"})
 
 
@@ -104,6 +108,11 @@ def delete_user():
     username = data.get('user')
     try:
         cursor.execute("DELETE FROM users WHERE username=?", (username,))
+        svc_log_info(f"delete user ->[{username} ok]")
+        if mg.delete_login_info(username):
+            svc_log_info(f"delete user [{username}] login info ok")
+        else:
+            svc_log_err(f"delete user [{username}] login info fail")
         return jsonify({"code": Http_status.http_status_ok, "msg": "删除成功"})
     except:
         print(traceback.format_exc())
@@ -134,9 +143,11 @@ def update_user_pwd():
     try:
         hash_pwd = p.encryption(pwd1)
         cursor.execute("UPDATE users SET password=? WHERE username=?", (hash_pwd, user_name,))
+        svc_log_info(f"[{user_name}] update password ok")
         return jsonify({"code": Http_status.http_status_ok, "msg": "修改成功"})
     except:
         print(traceback.format_exc())
+        svc_log_err(f"[{user_name}] update password fail")
         return jsonify({"code": Http_status.http_status_server_err, "msg": "修改失败"})
 
 
