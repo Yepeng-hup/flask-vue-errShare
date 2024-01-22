@@ -8,7 +8,7 @@ from model.mongo.mgMode import Mg_mode
 from core.utils.utils import check_token
 from core.conf import fk_upload_ip_domain, fk_port
 from core.httpStatus import Http_status
-from core.svclog import svc_log_err
+from core.svclog import svc_log_err, svc_log_info
 
 
 article_manage = Blueprint("article_manage", __name__)
@@ -310,8 +310,10 @@ def recovery_read():
 def recovery_delete():
     data = request.get_json()
     titel_name = data.get('titel')
+    delete_user = data.get('user')
     if not mg.delete_recovery_text(titel_name):
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败"})
+    svc_log_info(f"[{delete_user}] use delete text [{titel_name}]")
     return jsonify({"code": Http_status.http_status_ok, "msg": "删除成功"})
 
 
