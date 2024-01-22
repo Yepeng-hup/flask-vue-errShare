@@ -143,7 +143,7 @@ class Mg_mode(object):
 
     def delete_login_info(self, user) -> bool:
         try:
-            rel = mg_col_es_login_info.delete_one({"user": user})
+            rel = mg_col_es_login_info.delete_many({"user": user})
             if rel.acknowledged:
                 return True
             return False

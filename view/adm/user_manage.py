@@ -106,6 +106,8 @@ def update_user():
 def delete_user():
     data = request.get_json()
     username = data.get('user')
+    if username == "root":
+        return jsonify({"code": Http_status.http_status_server_err, "msg": "不允许删除root"})
     try:
         cursor.execute("DELETE FROM users WHERE username=?", (username,))
         svc_log_info(f"delete user ->[{username} ok]")
