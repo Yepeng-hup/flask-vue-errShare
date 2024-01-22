@@ -217,7 +217,9 @@ def class_delete():
     data = request.get_json()
     class_name = data.get('class')
     text_list = mg.select_text({'class': class_name}, {'text': 0, '_id': 0})
-    if len(text_list) > 0:
+    recovery_text_list = mg.select_recovery_text({'class': class_name}, {'text': 0, '_id': 0})
+    if len(text_list) > 0 or len(recovery_text_list) > 0:
+        svc_log_err(f"text or recovery_text have article association -> class name: [{class_name}]")
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败,有关联文章"})
     if not mg.delete_class(class_name):
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败"})
@@ -280,7 +282,9 @@ def label_delete():
     data = request.get_json()
     label_name = data.get('label')
     text_list = mg.select_text({'label': label_name}, {'text': 0, '_id': 0})
-    if len(text_list) > 0:
+    recovery_text_list = mg.select_recovery_text({'label': label_name}, {'text': 0, '_id': 0})
+    if len(text_list) > 0 or len(recovery_text_list) > 0:
+        svc_log_err(f"text or recovery_text have article association -> label name: [{label_name}]")
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败,有关联文章"})
     if not mg.delete_label(label_name):
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败"})
