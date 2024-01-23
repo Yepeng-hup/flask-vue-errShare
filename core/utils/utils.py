@@ -150,6 +150,14 @@ def show_all_user_num() -> int:
     return len(rel)
 
 
+def run_linux_code(run_code) -> bool:
+    x = os.system(run_code)
+    if x == 0:
+        return True
+    return False
+
+
+
 # ######################## 装饰器 #########################
 
 
@@ -191,4 +199,15 @@ def access_limit(max_calls, period, api_name=None):
         return wrapper
 
     return decorator
+
+
+def calculate_time(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        svc_log_info(f"function name: {func.__name__} runtime: {end_time - start_time} s")
+        return result
+    return wrapper
 

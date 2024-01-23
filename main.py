@@ -14,6 +14,8 @@ from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
 from view.adm.admin import admin
 from view.adm.data import data
+from view.adm.systems import systems
+from view.adm.iptabless import iptabless
 from core.svclog import svc_log_warn
 
 app = Flask(__name__)
@@ -31,6 +33,8 @@ app.register_blueprint(user_manage)
 app.register_blueprint(admin)
 app.register_blueprint(article_manage)
 app.register_blueprint(data)
+app.register_blueprint(systems)
+app.register_blueprint(iptabless)
 
 
 def clogo():
