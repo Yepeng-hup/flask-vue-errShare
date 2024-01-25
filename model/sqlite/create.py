@@ -11,35 +11,51 @@ p = Pwd_encryption_decrypt()
 
 
 def create_tables():
-    table_list = ["users", "test"]
+    new_list = []
+    table_list = ["users", "blacklist"]
     db_exists_table = s.show_all_table()
+    for i in db_exists_table:
+        new_list.append(i[0])
 
     if len(db_exists_table) == 0:
         try:
             cursor.execute(
                 '''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, role TEXT, password TEXT, phone TEXT, mailbox TEXT)''')
             svc_log_info("table [users] create ok.")
+            cursor.execute(
+                '''CREATE TABLE IF NOT EXISTS blacklist (id INTEGER PRIMARY KEY, ipaddr TEXT)''')
+            svc_log_info("table [blacklist] create ok.")
             return
         except:
-            svc_log_err("table [users] create fail.")
             print(traceback.format_exc())
+            sys.exit(1)
     else:
 
         for table in table_list:
-            if table in db_exists_table[0]:
-                pass
-            elif table == "users":
-                try:
-                    cursor.execute(
-                        '''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, role TEXT, password TEXT, phone TEXT, mailbox TEXT)''')
-                    svc_log_info("table [users] create ok.")
-                except:
-                    svc_log_err("table [users] create fail.")
-                    print(traceback.format_exc())
-            # elif table == "test":
-            #     print("create test")
+            if table in new_list:
+                continue
             else:
-                pass
+                if table == "users":
+                    try:
+                        cursor.execute(
+                            '''CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT, role TEXT, password TEXT, phone TEXT, mailbox TEXT)''')
+                        svc_log_info("add table [users] create ok.")
+                    except:
+                        svc_log_err("add table [users] create fail.")
+                        print(traceback.format_exc())
+                        sys.exit(1)
+                elif table == "blacklist":
+                    try:
+                        cursor.execute(
+                            '''CREATE TABLE IF NOT EXISTS blacklist (id INTEGER PRIMARY KEY, ipaddr TEXT)''')
+                        svc_log_info("add table [blacklist] create ok.")
+                    except:
+                        svc_log_err("add table [blacklist] create fail.")
+                        print(traceback.format_exc())
+                        sys.exit(1)
+                else:
+                    pass
+    del new_list
     return
 
 

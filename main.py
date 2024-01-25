@@ -10,13 +10,15 @@ from core.conf import fk_host, fk_port, fk_debug, \
     fk_timezone, \
     fk_file_video_acc_white
 from core.init import Inits
+from core.svclog import svc_log_warn
 from view.adm.user_manage import user_manage
 from view.adm.article_manage import article_manage
 from view.adm.admin import admin
 from view.adm.data import data
 from view.adm.systems import systems
 from view.adm.iptabless import iptabless
-from core.svclog import svc_log_warn
+from view.adm.black import black
+
 
 app = Flask(__name__)
 i = Inits()
@@ -35,6 +37,7 @@ app.register_blueprint(article_manage)
 app.register_blueprint(data)
 app.register_blueprint(systems)
 app.register_blueprint(iptabless)
+app.register_blueprint(black)
 
 
 def clogo():

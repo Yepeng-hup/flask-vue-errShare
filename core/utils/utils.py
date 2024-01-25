@@ -32,6 +32,14 @@ def data_init(data) -> list:
     return user_list
 
 
+def data_init_rel(data, dict_) -> list:
+    l = []
+    for i in data:
+        u = dict_
+        l.append(u)
+    return l
+
+
 # 检测端口是否在线
 def check_network_status(host, port) -> bool:
     try:
