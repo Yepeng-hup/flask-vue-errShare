@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert title="个人私服使用，并不完善。如需要，自己二次开发。" type="warning" effect="dark" />
+    <el-alert title="个人私服使用，并不完善。如需要，自己二次开发。" type="warning" effect="dark"/>
   </div>
 
   <div class="bj" style="margin-top: 15px">
@@ -34,9 +34,9 @@
         <el-table-column width="200" prop="num" label="序列号"/>
         <el-table-column prop="rule" label="规则"/>
         <el-table-column label="操作">
-        <template #default="scope">
-          <el-button type="danger" @click="deleteRule(scope.row)">删除</el-button>
-        </template>
+          <template #default="scope">
+            <el-button type="danger" @click="deleteRule(scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </ul>
@@ -50,9 +50,10 @@ import {reactive, ref, toRefs} from "vue";
 import {getIptablesGet, addRulePost, deleteRuleDel} from "@/utils/apis"
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+
 export default {
   name: "SysIptablesView",
-  setup(){
+  setup() {
     const data = reactive({
       iptablesRuleList: [],
       dialogFormVisible: false,
@@ -201,6 +202,7 @@ export default {
 .el-alert {
   margin: 20px 0 0;
 }
+
 .el-alert:first-child {
   margin: 0;
 }

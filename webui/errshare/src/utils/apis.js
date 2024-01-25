@@ -2,8 +2,8 @@ import {post, get, del} from "./axiosPlus"
 
 
 // ############################## user #####################################
-export const showUserGet = data=>{
-    
+export const showUserGet = data => {
+
     return get(
         {
             url: "/user/get",
@@ -12,7 +12,7 @@ export const showUserGet = data=>{
     )
 }
 
-export const searchUserGet = data=>{
+export const searchUserGet = data => {
 
     return get(
         {
@@ -22,7 +22,7 @@ export const searchUserGet = data=>{
     )
 }
 
-export const createUserPost = data=>{
+export const createUserPost = data => {
     return post(
         {
             url: "/user/create",
@@ -31,7 +31,7 @@ export const createUserPost = data=>{
     )
 }
 
-export const updateUserPost = data=>{
+export const updateUserPost = data => {
     return post(
         {
             url: "/user/update",
@@ -41,7 +41,7 @@ export const updateUserPost = data=>{
 }
 
 
-export const delUserDelete = data=>{
+export const delUserDelete = data => {
     return del(
         {
             url: "/user/delete",
@@ -51,7 +51,7 @@ export const delUserDelete = data=>{
 }
 
 
-export const updateUserPwdPost = data=>{
+export const updateUserPwdPost = data => {
     return post(
         {
             url: "/user/update/passwd",
@@ -60,7 +60,7 @@ export const updateUserPwdPost = data=>{
     )
 }
 
-export const getUserDataGet = data=>{
+export const getUserDataGet = data => {
     return get(
         {
             url: "/user/data/pic",
@@ -72,7 +72,7 @@ export const getUserDataGet = data=>{
 
 // ############################## Text #####################################
 
-export const contentWritePost = data=>{
+export const contentWritePost = data => {
     return post(
         {
             url: "/wz/w",
@@ -81,7 +81,7 @@ export const contentWritePost = data=>{
     )
 }
 
-export const searchContentPost = data=>{
+export const searchContentPost = data => {
     return post(
         {
             url: "/wz/s",
@@ -90,7 +90,7 @@ export const searchContentPost = data=>{
     )
 }
 
-export const editContentPost = data=>{
+export const editContentPost = data => {
     return post(
         {
             url: "/wz/edit/show",
@@ -99,7 +99,7 @@ export const editContentPost = data=>{
     )
 }
 
-export const updateContentPost = data=>{
+export const updateContentPost = data => {
     return post(
         {
             url: "/wz/edit/update",
@@ -108,7 +108,7 @@ export const updateContentPost = data=>{
     )
 }
 
-export const showArticleGet = data=>{
+export const showArticleGet = data => {
     return get(
         {
             url: "/wz/r",
@@ -117,7 +117,7 @@ export const showArticleGet = data=>{
     )
 }
 
-export const delTextDelete = data=>{
+export const delTextDelete = data => {
     return del(
         {
             url: "/wz/d",
@@ -126,7 +126,7 @@ export const delTextDelete = data=>{
     )
 }
 
-export const addLabelPost = data=>{
+export const addLabelPost = data => {
     return post(
         {
             url: "/wz/label/w",
@@ -135,7 +135,7 @@ export const addLabelPost = data=>{
     )
 }
 
-export const getLabelGet = data=>{
+export const getLabelGet = data => {
     return get(
         {
             url: "/wz/label/r",
@@ -144,7 +144,7 @@ export const getLabelGet = data=>{
     )
 }
 
-export const showWzLabelGet = data=>{
+export const showWzLabelGet = data => {
     return get(
         {
             url: "/wz/label/show",
@@ -153,7 +153,7 @@ export const showWzLabelGet = data=>{
     )
 }
 
-export const delLabelDelete = data=>{
+export const delLabelDelete = data => {
     return del(
         {
             url: "/wz/label/d",
@@ -163,7 +163,7 @@ export const delLabelDelete = data=>{
 }
 
 
-export const addClassPost = data=>{
+export const addClassPost = data => {
     return post(
         {
             url: "/wz/class/w",
@@ -172,7 +172,7 @@ export const addClassPost = data=>{
     )
 }
 
-export const getClassGet = data=>{
+export const getClassGet = data => {
     return get(
         {
             url: "/wz/class/r",
@@ -181,7 +181,7 @@ export const getClassGet = data=>{
     )
 }
 
-export const showWzClassGet = data=>{
+export const showWzClassGet = data => {
     return get(
         {
             url: "/wz/class/show",
@@ -190,7 +190,7 @@ export const showWzClassGet = data=>{
     )
 }
 
-export const screenClassPost = data=>{
+export const screenClassPost = data => {
     return post(
         {
             url: "/wz/class/screen",
@@ -199,7 +199,7 @@ export const screenClassPost = data=>{
     )
 }
 
-export const delClassDelete = data=>{
+export const delClassDelete = data => {
     return del(
         {
             url: "/wz/class/d",
@@ -209,10 +209,9 @@ export const delClassDelete = data=>{
 }
 
 
-
 // ###################### recovery api ######################################
 
-export const getRecoveryInfoGet = data=>{
+export const getRecoveryInfoGet = data => {
     return get(
         {
             url: "/wz/recovery/r",
@@ -221,7 +220,7 @@ export const getRecoveryInfoGet = data=>{
     )
 }
 
-export const delRecDelete = data=>{
+export const delRecDelete = data => {
     return del(
         {
             url: "/wz/recovery/d",
@@ -230,7 +229,7 @@ export const delRecDelete = data=>{
     )
 }
 
-export const revokeRecPost = data=>{
+export const revokeRecPost = data => {
     return post(
         {
             url: "/wz/recovery/c",
@@ -240,10 +239,9 @@ export const revokeRecPost = data=>{
 }
 
 
-
 // ######################## home api #############################
 
-export const getLoginInfoGet = data=>{
+export const getLoginInfoGet = data => {
     return get(
         {
             url: "/info/l",
@@ -252,7 +250,7 @@ export const getLoginInfoGet = data=>{
     )
 }
 
-export const checkAllPost = data=>{
+export const checkAllPost = data => {
     return post(
         {
             url: "/check",
@@ -264,7 +262,7 @@ export const checkAllPost = data=>{
 
 // ############### data #########################################
 
-export const getDataGet = data=>{
+export const getDataGet = data => {
     return get(
         {
             url: "/pic/data",
@@ -275,7 +273,7 @@ export const getDataGet = data=>{
 
 // ###################### system ##########################################
 
-export const getSysProcessGet = data=>{
+export const getSysProcessGet = data => {
     return get(
         {
             url: "/sys/status/process",
@@ -284,7 +282,7 @@ export const getSysProcessGet = data=>{
     )
 }
 
-export const getProcessInfoPost = data=>{
+export const getProcessInfoPost = data => {
     return post(
         {
             url: "/sys/status/process/info",
@@ -293,7 +291,7 @@ export const getProcessInfoPost = data=>{
     )
 }
 
-export const processKillPost = data=>{
+export const processKillPost = data => {
     return post(
         {
             url: "/sys/status/process/kill",
@@ -303,7 +301,7 @@ export const processKillPost = data=>{
 }
 
 
-export const getSysNetworkGet = data=>{
+export const getSysNetworkGet = data => {
     return get(
         {
             url: "/sys/status/network",
@@ -312,7 +310,7 @@ export const getSysNetworkGet = data=>{
     )
 }
 
-export const getIptablesGet = data=>{
+export const getIptablesGet = data => {
     return get(
         {
             url: "/sys/iptables/select",
@@ -321,7 +319,7 @@ export const getIptablesGet = data=>{
     )
 }
 
-export const addRulePost = data=>{
+export const addRulePost = data => {
     return post(
         {
             url: "/sys/iptables/cfg",
@@ -330,7 +328,7 @@ export const addRulePost = data=>{
     )
 }
 
-export const deleteRuleDel = data=>{
+export const deleteRuleDel = data => {
     return del(
         {
             url: "/sys/iptables/del",
@@ -341,7 +339,7 @@ export const deleteRuleDel = data=>{
 
 // ######################### black list ####################################
 
-export const configBlackPost = data=>{
+export const configBlackPost = data => {
     return post(
         {
             url: "/black/cfg",
@@ -350,7 +348,7 @@ export const configBlackPost = data=>{
     )
 }
 
-export const showBlackPost = data=>{
+export const showBlackPost = data => {
     return post(
         {
             url: "/black/show",
@@ -359,7 +357,7 @@ export const showBlackPost = data=>{
     )
 }
 
-export const deleteLocalDel = data=>{
+export const deleteLocalDel = data => {
     return del(
         {
             url: "/black/local/del",
@@ -368,7 +366,7 @@ export const deleteLocalDel = data=>{
     )
 }
 
-export const deleteDenyDel = data=>{
+export const deleteDenyDel = data => {
     return del(
         {
             url: "/black/deny/del",

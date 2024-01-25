@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert title="系统进程过滤的不是很完善，如需完善自己可以二开，通过json定制指定进程" type="warning" effect="dark" />
+    <el-alert title="系统进程过滤的不是很完善，如需完善自己可以二开，通过json定制指定进程" type="warning" effect="dark"/>
   </div>
   <div class="bj" style="margin-top: 15px">
     <ul class="infinite-list" style="overflow: auto; margin-top: 10px;">
@@ -17,15 +17,15 @@
                 <el-button type="primary" @click="catProcessInfo(scope.row)">详细信息</el-button>
               </template>
               <el-table :data="processInfo">
-                <el-table-column width="150" prop="ProcessName" label="name" />
-                <el-table-column width="150" prop="ProcessStatus" label="status" />
-                <el-table-column width="150" prop="ProcessStartTime" label="startTime" />
-                <el-table-column width="150" prop="ProcessThreads" label="threads" />
-                <el-table-column width="150" prop="ProcessCPU" label="cpu" />
-                <el-table-column width="150" prop="ProcessReadCount" label="readCount" />
-                <el-table-column width="150" prop="ProcessWriteCount" label="writeCount" />
-                <el-table-column width="150" prop="ProcessReadBytes" label="readBytes" />
-                <el-table-column width="150" prop="ProcessWriteBytes" label="writeBytes" />
+                <el-table-column width="150" prop="ProcessName" label="name"/>
+                <el-table-column width="150" prop="ProcessStatus" label="status"/>
+                <el-table-column width="150" prop="ProcessStartTime" label="startTime"/>
+                <el-table-column width="150" prop="ProcessThreads" label="threads"/>
+                <el-table-column width="150" prop="ProcessCPU" label="cpu"/>
+                <el-table-column width="150" prop="ProcessReadCount" label="readCount"/>
+                <el-table-column width="150" prop="ProcessWriteCount" label="writeCount"/>
+                <el-table-column width="150" prop="ProcessReadBytes" label="readBytes"/>
+                <el-table-column width="150" prop="ProcessWriteBytes" label="writeBytes"/>
               </el-table>
             </el-popover>
             <el-button type="danger" @click="killProcess(scope.row)">KILL</el-button>
@@ -42,15 +42,17 @@ import {reactive, toRefs, ref} from "vue";
 import {getSysProcessGet, getProcessInfoPost, processKillPost} from "@/utils/apis"
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+
 export default {
   name: "SysProcessView",
-  setup(){
+  setup() {
     const data = reactive({
       processList: [],
       processInfo: [],
     })
 
     const router = useRouter();
+
     function showSysProcess() {
       if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null) {
         router.push({name: 'loginView'});
@@ -73,6 +75,7 @@ export default {
       )
 
     }
+
     showSysProcess()
 
     const dialogTableVisible = ref(false)
@@ -156,6 +159,7 @@ export default {
 .el-alert {
   margin: 20px 0 0;
 }
+
 .el-alert:first-child {
   margin: 0;
 }

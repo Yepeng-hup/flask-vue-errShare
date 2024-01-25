@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ElLoading, ElMessage} from 'element-plus'
+import {ElLoading, ElMessage} from 'element-plus'
 
 let loadingObj = null
 const baseURL = process.env.VUE_APP_SERVER_HOST;
@@ -12,7 +12,7 @@ const Service = axios.create({
         //数据类型
         "Content-type": "application/json;charset=utf-8",
         //授权的api,必须传入token,否则无权访问
-        "Authorization": 'Bearer '+ localStorage.getItem('userToken'),
+        "Authorization": 'Bearer ' + localStorage.getItem('userToken'),
     },
 })
 
@@ -20,15 +20,14 @@ const Service = axios.create({
 //请求拦截
 Service.interceptors.request.use(
     config => {
-        loadingObj=ElLoading.service({
+        loadingObj = ElLoading.service({
             lock: true,
             text: 'Loading',
             background: 'rgba(0, 0, 0, 0.7)',
-          })
-          return config
+        })
+        return config
     }
 )
-
 
 
 //响应拦截
@@ -55,33 +54,33 @@ Service.interceptors.response.use(
 
 export const post = config => {
     return Service({
-            ...config,
-            method: "post",
-            data: config.data,
-        })   
+        ...config,
+        method: "post",
+        data: config.data,
+    })
 }
 
 export const get = config => {
     return Service({
-            ...config,
-            method: "get",
-            params: config.data,
-        })   
+        ...config,
+        method: "get",
+        params: config.data,
+    })
 }
 
 
 export const put = config => {
     return Service({
-            ...config,
-            method: "put",
-            params: config.data,
-        })   
+        ...config,
+        method: "put",
+        params: config.data,
+    })
 }
 
 export const del = config => {
     return Service({
-            ...config,
-            method: "delete",
-            params: config.data,
-        })   
+        ...config,
+        method: "delete",
+        params: config.data,
+    })
 }

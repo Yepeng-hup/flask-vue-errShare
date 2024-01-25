@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 
 
 const routes = [
@@ -15,22 +15,54 @@ const routes = [
         // 重定向
         redirect: '/home',
         children: [
-            {path: "/home", component: () => import("./views/assembly/HomeView.vue"), name: "HomeView"}, 
-            {path: "/user/create", component: () => import("./views/assembly/UserCreateView.vue"), name: "UserCreateView"},
+            {path: "/home", component: () => import("./views/assembly/HomeView.vue"), name: "HomeView"},
+            {
+                path: "/user/create",
+                component: () => import("./views/assembly/UserCreateView.vue"),
+                name: "UserCreateView"
+            },
             {path: "/wz/pic", component: () => import("./views/assembly/ArticlePicView.vue"), name: "ArticlePicView"},
             {path: "/wz/category", component: () => import("./views/assembly/CategoryView.vue"), name: "CategoryView"},
-            {path: "/wz/write", component: () => import("./views/assembly/ArticleWritingView.vue"), name: "ArticleWritingView"},
-            {path: "/wz/label", component: () => import("./views/assembly/ArticleLabelView.vue"), name: "ArticleLabelView"},
+            {
+                path: "/wz/write",
+                component: () => import("./views/assembly/ArticleWritingView.vue"),
+                name: "ArticleWritingView"
+            },
+            {
+                path: "/wz/label",
+                component: () => import("./views/assembly/ArticleLabelView.vue"),
+                name: "ArticleLabelView"
+            },
             {path: "/data", component: () => import("./views/assembly/DataView.vue"), name: "DataView"},
             {path: "/recovery", component: () => import("./views/assembly/RecoveryView.vue"), name: "RecoveryView"},
-            {path: "/user/center", component: () => import("./views/assembly/UserCenterView.vue"), name: "UserCenterView"},
-            {path: "/sys/status/process", component: () => import("./views/system/SysProcessView.vue"), name: "SysProcessView"},
-            {path: "/sys/status/network", component: () => import("./views/system/SysNetworkView.vue"), name: "SysNetworkView"},
-            {path: "/sys/iptables", component: () => import("./views/system/SysIptablesView.vue"), name: "SysIptablesView"},
-            {path: "/sys/black/list", component: () => import("./views/system/SysBlacklistView.vue"), name: "SysBlacklistView"},
+            {
+                path: "/user/center",
+                component: () => import("./views/assembly/UserCenterView.vue"),
+                name: "UserCenterView"
+            },
+            {
+                path: "/sys/status/process",
+                component: () => import("./views/system/SysProcessView.vue"),
+                name: "SysProcessView"
+            },
+            {
+                path: "/sys/status/network",
+                component: () => import("./views/system/SysNetworkView.vue"),
+                name: "SysNetworkView"
+            },
+            {
+                path: "/sys/iptables",
+                component: () => import("./views/system/SysIptablesView.vue"),
+                name: "SysIptablesView"
+            },
+            {
+                path: "/sys/black/list",
+                component: () => import("./views/system/SysBlacklistView.vue"),
+                name: "SysBlacklistView"
+            },
         ]
     },
-    
+
 ];
 
 

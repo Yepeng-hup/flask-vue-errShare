@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert title="注意！这里删除就代表彻底删除了。" type="error" effect="dark" />
+    <el-alert title="注意！这里删除就代表彻底删除了。" type="error" effect="dark"/>
   </div>
   <div class="home-centext">
     <span style="color: #606266"><b>回收文章</b>({{ nums }})</span>
@@ -165,6 +165,7 @@ export default {
 .el-alert {
   margin: 20px 0 0;
 }
+
 .el-alert:first-child {
   margin: 0;
 }

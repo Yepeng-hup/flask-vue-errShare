@@ -64,7 +64,9 @@
 
               <el-sub-menu v-if="showSysStatusManagement" index="6">
                 <template #title>
-                  <el-icon><Menu /></el-icon>
+                  <el-icon>
+                    <Menu/>
+                  </el-icon>
                   <span>系统管理</span>
                 </template>
                 <el-menu-item-group>
