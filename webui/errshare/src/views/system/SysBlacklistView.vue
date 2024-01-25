@@ -159,6 +159,10 @@ export default {
     }
 
     const denyDel = row =>{
+      if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null) {
+        router.push({name: 'loginView'});
+        return
+      }
       const {ruleStr} = row
       deleteDenyDel({"denyRule": ruleStr}).then(
           res => {
