@@ -15,14 +15,26 @@ const routes = [
         // 重定向
         redirect: '/home',
         children: [
-            {path: "/home", component: () => import("./views/assembly/HomeView.vue"), name: "HomeView"},
+            {
+                path: "/home",
+                component: () => import("./views/assembly/HomeView.vue"),
+                name: "HomeView"
+            },
             {
                 path: "/user/create",
                 component: () => import("./views/assembly/UserCreateView.vue"),
                 name: "UserCreateView"
             },
-            {path: "/wz/pic", component: () => import("./views/assembly/ArticlePicView.vue"), name: "ArticlePicView"},
-            {path: "/wz/category", component: () => import("./views/assembly/CategoryView.vue"), name: "CategoryView"},
+            {
+                path: "/wz/pic",
+                component: () => import("./views/assembly/ArticlePicView.vue"),
+                name: "ArticlePicView"
+            },
+            {
+                path: "/wz/category",
+                component: () => import("./views/assembly/CategoryView.vue"),
+                name: "CategoryView"
+            },
             {
                 path: "/wz/write",
                 component: () => import("./views/assembly/ArticleWritingView.vue"),
@@ -33,8 +45,16 @@ const routes = [
                 component: () => import("./views/assembly/ArticleLabelView.vue"),
                 name: "ArticleLabelView"
             },
-            {path: "/data", component: () => import("./views/assembly/DataView.vue"), name: "DataView"},
-            {path: "/recovery", component: () => import("./views/assembly/RecoveryView.vue"), name: "RecoveryView"},
+            {
+                path: "/data",
+                component: () => import("./views/assembly/DataView.vue"),
+                name: "DataView"
+            },
+            {
+                path: "/recovery",
+                component: () => import("./views/assembly/RecoveryView.vue"),
+                name: "RecoveryView"
+            },
             {
                 path: "/user/center",
                 component: () => import("./views/assembly/UserCenterView.vue"),
