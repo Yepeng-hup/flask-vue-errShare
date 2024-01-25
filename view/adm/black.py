@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import traceback
 from flask_jwt_extended import jwt_required
+import re
 
 from core.svclog import svc_log_info, svc_log_err
 from core.httpStatus import Http_status
@@ -30,7 +31,7 @@ def black_ip_cfg():
         w_init = service_name+":"+ip+":deny"
         try:
             with open('/etc/hosts.deny', 'a') as file:
-                file.write(w_init)
+                file.write(w_init+"\n")
             return jsonify({
                 "code": Http_status.http_status_ok,
                 "msg": "加入成功"
@@ -78,16 +79,27 @@ def show_black():
                     "address": i[0]
                 }
                 local_list.append(u)
-            return jsonify({"s_name": "local", "local_data": local_list})
+            return jsonify({"code": Http_status.http_status_ok, "msg": "获取local成功", "s_name": "local", "local_data": local_list})
         except:
             print(traceback.format_exc())
             svc_log_err("show [local] type black list fail")
+            return jsonify({"code": Http_status.http_status_server_err, "msg": "获取local失败"})
     else:
+        deny_list = []
+        pattern = r'^#.*$'
         try:
-            return jsonify({"s_name": "deny", "deny_data": [{"ruleStr": "sshd:192.222.222.100:deny"}]})
+            with open("/etc/hosts.deny", "r") as file:
+                for i in file:
+                    if not re.match(pattern, i):
+                        u = {
+                            "ruleStr": i
+                        }
+                        deny_list.append(u)
+            return jsonify({"code": Http_status.http_status_ok, "msg": "获取deny成功", "s_name": "deny", "deny_data": deny_list, })
         except:
             print(traceback.format_exc())
-            pass
+            svc_log_err("show [deny] type black list fail")
+            return jsonify({"code": Http_status.http_status_server_err, "msg": "获取deny失败"})
 
 
 @black.route("/black/local/del", methods=['DELETE'])
