@@ -273,5 +273,100 @@ export const getDataGet = data=>{
     )
 }
 
+// ###################### system ##########################################
+
+export const getSysProcessGet = data=>{
+    return get(
+        {
+            url: "/sys/status/process",
+            data
+        }
+    )
+}
+
+export const getProcessInfoPost = data=>{
+    return post(
+        {
+            url: "/sys/status/process/info",
+            data
+        }
+    )
+}
+
+export const processKillPost = data=>{
+    return post(
+        {
+            url: "/sys/status/process/kill",
+            data
+        }
+    )
+}
+
+
+export const getSysNetworkGet = data=>{
+    return get(
+        {
+            url: "/sys/status/network",
+            data
+        }
+    )
+}
+
+export const getIptablesGet = data=>{
+    return get(
+        {
+            url: "/sys/iptables/select",
+            data
+        }
+    )
+}
+
+export const addRulePost = data=>{
+    return post(
+        {
+            url: "/sys/iptables/cfg",
+            data
+        }
+    )
+}
+
+export const deleteRuleDel = data=>{
+    return del(
+        {
+            url: "/sys/iptables/del",
+            data
+        }
+    )
+}
+
+// ######################### black list ####################################
+
+export const configBlackPost = data=>{
+    return post(
+        {
+            url: "/black/cfg",
+            data
+        }
+    )
+}
+
+export const showBlackPost = data=>{
+    return post(
+        {
+            url: "/black/show",
+            data
+        }
+    )
+}
+
+export const deleteLocalDel = data=>{
+    return del(
+        {
+            url: "/black/local/del",
+            data
+        }
+    )
+}
+
 
 

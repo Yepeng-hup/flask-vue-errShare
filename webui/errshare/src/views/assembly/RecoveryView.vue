@@ -1,9 +1,12 @@
 <template>
+  <div>
+    <el-alert title="注意！这里删除就代表彻底删除了。" type="error" effect="dark" />
+  </div>
   <div class="home-centext">
     <span style="color: #606266"><b>回收文章</b>({{ nums }})</span>
     <el-divider border-style="dashed"/>
 
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 10px;">
       <el-table :data="wzInfoList" style="width: 100%">
         <el-table-column prop="titel" label="标题" width="300"/>
         <el-table-column prop="user" label="作者" width="100"/>
@@ -79,7 +82,7 @@ export default {
         return
       }
       const {titel} = row
-      delRecDelete({"titel": titel}).then(
+      delRecDelete({"titel": titel, "user": localStorage.getItem("user")}).then(
           res => {
             showRecInfo()
             if (res.code != 200) {
@@ -157,3 +160,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.el-alert {
+  margin: 20px 0 0;
+}
+.el-alert:first-child {
+  margin: 0;
+}
+</style>

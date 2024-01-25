@@ -1,4 +1,5 @@
 <template>
+    <el-alert title="当做样式。如需要，自行二次开发。" type="info" effect="dark" />
     <el-row :gutter="20">
       <el-col :span="8"><div class="grid-content ep-bg-purple" />
         <div class="bj">
@@ -74,5 +75,11 @@ export default {
   width: 100%;
   padding: 10px;
   background: #fff;
+}
+.el-alert {
+  margin: 20px 0 0;
+}
+.el-alert:first-child {
+  margin: 0;
 }
 </style>

@@ -62,6 +62,22 @@
                 <span>回收站</span>
               </el-menu-item>
 
+              <el-sub-menu v-if="showSysStatusManagement" index="6">
+                <template #title>
+                  <el-icon><Menu /></el-icon>
+                  <span>系统管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-sub-menu index="6-1">
+                    <template #title>系统资源</template>
+                    <el-menu-item index="6-1-1" :route="{name: 'SysProcessView'}">进程状态</el-menu-item>
+                    <el-menu-item index="6-1-2" :route="{name: 'SysNetworkView'}">网络状态</el-menu-item>
+                  </el-sub-menu>
+                  <el-menu-item index="6-2" :route="{name: 'SysIptablesView'}">IPTABLES</el-menu-item>
+                  <el-menu-item index="6-3" :route="{name: 'SysBlacklistView'}">黑名单</el-menu-item>
+                </el-menu-item-group>
+              </el-sub-menu>
+
             </el-menu>
           </el-col>
         </el-row>
@@ -94,7 +110,7 @@
                       </el-menu>
                     </el-dropdown-item>
                     <el-dropdown-item>
-                      <a href="/"><span class="hover-text" @click="loginout()">立即退出</span></a>
+                      <a href="/"><span class="hover-text" @click="loginout()">安全退出</span></a>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
@@ -122,6 +138,7 @@ export default {
     const iszt = ref(false);
     const showUserManagement = ref(false);
     const showRecManagement = ref(false);
+    const showSysStatusManagement = ref(false);
     const showArticleManagement = ref(true);
     const title = ref("");
     const str = ref(true);
@@ -143,12 +160,14 @@ export default {
         showUserManagement.value = true;
         showArticleManagement.value = true;
         showRecManagement.value = true;
+        showSysStatusManagement.value = true
       } else if (roleName == "ordinary") {
         // const userData = { isAdmin: false };
         // const articleData = { isAdmin: true };
         showUserManagement.value = false;
         showArticleManagement.value = true;
         showRecManagement.value = false;
+        showSysStatusManagement.value = false
       } else {
         const xx = "view"
         console.log(xx)
@@ -174,6 +193,7 @@ export default {
       showUserManagement,
       showArticleManagement,
       showRecManagement,
+      showSysStatusManagement,
       loginout,
       str,
 
@@ -328,5 +348,10 @@ a {
 
 .infinite-list .infinite-list-item + .list-item {
   margin-top: 5px;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
 }
 </style>
