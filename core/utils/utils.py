@@ -18,6 +18,8 @@ from model.sqlite.select import Select_tables
 s = Select_tables()
 
 
+################################ 工具函数 #########################################################
+
 # 传入列表套元组，转换为列表套字典
 def data_init(data) -> list:
     user_list = []
@@ -165,6 +167,25 @@ def run_linux_code(run_code) -> bool:
     return False
 
 
+def delete_lines(filepath, target) -> bool:
+    try:
+        with open(filepath, 'r') as file:
+            lines = file.readlines()
+
+        temp_filename = f"{os.path.splitext(filepath)[0]}_tmp.txt"
+        with open(temp_filename, 'w') as temp_file:
+            for line in lines:
+                if target not in line:
+                    temp_file.write(line)
+
+        # 将临时文件重命名为原始文件
+        os.remove(filepath)
+        os.rename(temp_filename, filepath)
+        return True
+    except:
+        print(traceback.format_exc())
+        return False
+
 
 # ######################## 装饰器 #########################
 
@@ -217,5 +238,5 @@ def calculate_time(func):
         end_time = time.time()
         svc_log_info(f"function name: {func.__name__} runtime: {end_time - start_time} s")
         return result
-    return wrapper
 
+    return wrapper

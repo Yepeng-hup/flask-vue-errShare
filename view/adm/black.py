@@ -1,17 +1,21 @@
 from flask import Blueprint, jsonify, request
 import traceback
+from flask_jwt_extended import jwt_required
 
 from core.svclog import svc_log_info, svc_log_err
 from core.httpStatus import Http_status
 from model.sqlite.sqlite import cursor
 from model.sqlite.select import Select_tables
-from core.utils.utils import data_init_rel
+from core.utils.utils import check_token, delete_lines
+
 
 black = Blueprint("black", __name__)
 s = Select_tables()
 
 
 @black.route("/black/cfg", methods=['POST'])
+@jwt_required()
+@check_token
 def black_ip_cfg():
     data = request.get_json()
     service_name = data.get('serviceName')
@@ -60,6 +64,8 @@ def black_ip_cfg():
 
 
 @black.route("/black/show", methods=['POST'])
+@jwt_required()
+@check_token
 def show_black():
     local_list = []
     data = request.get_json()
@@ -85,6 +91,8 @@ def show_black():
 
 
 @black.route("/black/local/del", methods=['DELETE'])
+@jwt_required()
+@check_token
 def delete_local():
     data = request.get_json()
     del_ip = data.get('ip')
@@ -94,5 +102,16 @@ def delete_local():
     except:
         print(traceback.format_exc())
         return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败"})
+
+
+@black.route("/black/deny/del", methods=['DELETE'])
+@jwt_required()
+@check_token
+def delete_deny():
+    data = request.get_json()
+    deny_rule = data.get('denyRule')
+    if delete_lines("/etc/hosts.deny", deny_rule):
+        return jsonify({"code": Http_status.http_status_ok, "msg": "删除成功"})
+    return jsonify({"code": Http_status.http_status_server_err, "msg": "删除失败"})
 
 
