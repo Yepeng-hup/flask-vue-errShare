@@ -368,5 +368,14 @@ export const deleteLocalDel = data=>{
     )
 }
 
+export const deleteDenyDel = data=>{
+    return del(
+        {
+            url: "/black/deny/del",
+            data
+        }
+    )
+}
+
 
 

@@ -59,7 +59,7 @@
 
 <script>
 import {reactive, toRefs, ref} from "vue";
-import {configBlackPost, showBlackPost, deleteLocalDel} from "@/utils/apis";
+import {configBlackPost, showBlackPost, deleteLocalDel, deleteDenyDel} from "@/utils/apis";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
 export default {
@@ -158,8 +158,29 @@ export default {
       )
     }
 
-    const denyDel = ()=>{
-
+    const denyDel = row =>{
+      const {ruleStr} = row
+      deleteDenyDel({"denyRule": ruleStr}).then(
+          res => {
+            if (res.code !== 200) {
+              ElMessage(
+                  {
+                    message: res.msg,
+                    type: "error",
+                    duration: 5000,
+                  }
+              )
+              return
+            }
+            ElMessage(
+                {
+                  message: res.msg,
+                  type: "success",
+                  duration: 5000,
+                }
+            )
+          }
+      )
     }
 
     return {
