@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 import traceback
+from flask_jwt_extended import jwt_required
 
 from core.svclog import svc_log_info, svc_log_err
 from core.utils.utils import check_token, run_linux_code
@@ -13,6 +14,8 @@ s = Search_secure()
 
 
 @iptabless.route("/sys/iptables/cfg", methods=['POST'])
+@jwt_required()
+@check_token
 def config_iptables():
     data = request.get_json()
     iptables_rule = data.get("rule")
@@ -28,6 +31,8 @@ def config_iptables():
 
 
 @iptabless.route("/sys/iptables/select")
+@jwt_required()
+@check_token
 def select_iptables_cfg():
     rule_list = []
     rule = []
@@ -60,6 +65,8 @@ def select_iptables_cfg():
 
 
 @iptabless.route("/sys/iptables/del", methods=['DELETE'])
+@jwt_required()
+@check_token
 def del_iptables_cfg():
     data = request.get_json()
     rule_num = data.get('ruleNum')
