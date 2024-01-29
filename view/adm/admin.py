@@ -7,6 +7,7 @@ from model.mongo.mgMode import Mg_mode
 from core.utils.utils import access_limit
 from core.conf import fk_limit_second, fk_limit_number, fk_search_not_str
 from model.secure.search import Search_secure
+from core.httpStatus import Http_status
 
 
 admin = Blueprint("admin", __name__)
@@ -15,10 +16,10 @@ mg = Mg_mode()
 s = Search_secure()
 
 
-@admin.route("/test", endpoint="test")
+@admin.route("/health")
 @access_limit(max_calls=fk_limit_number, period=fk_limit_second, api_name="read_send_content")
 def tests():
-    return jsonify({"code": 200, "msg": "run ok."})
+    return jsonify({"code": Http_status.http_status_ok, "msg": "run ok."})
 
 
 @admin.route("/documents/select/<file_name>", endpoint="read_send_content")
