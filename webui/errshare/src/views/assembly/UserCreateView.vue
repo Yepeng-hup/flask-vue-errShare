@@ -19,15 +19,16 @@
         </div>
         <el-button type="primary" @click="addUser">新建用户</el-button>
         <el-button type="primary" @click="updatePasswd">密码修改</el-button>
+        <el-button type="primary" @click="blackListUser">黑名单用户</el-button>
       </div>
       <!-- :data后面是数据源元组加对象 -->
       <ul class="infinite-list" style="overflow: auto">
-        <el-table :data="userInfoList" style="width: 100%">
+        <el-table :data="userInfoList">
           <el-table-column prop="user" label="用户名" width="100"/>
           <el-table-column prop="role" label="角色" width="100"/>
           <el-table-column prop="phone" label="电话"/>
           <el-table-column prop="mailbox" label="邮箱"/>
-          <el-table-column prop="mg_state" label="状态">
+          <el-table-column prop="mg_state" label="状态" >
             <template #default="scope">
               <el-switch v-model="scope.row.mg_state"/>
             </template>
@@ -72,6 +73,18 @@
       />
 
     </div>
+
+    <!-- 黑名单-->
+    <el-dialog v-model="dialogTableVisibleblack" title="黑名单用户 (即登录失败6次以上)" width="35%">
+      <el-table :data="blackUserList" height="300" width="350">
+        <el-table-column property="name" label="用户名" width="250"/>
+        <el-table-column label="操作" width="100">
+          <template #default="scope">
+            <el-button type="danger" @click="blackUserDel(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
 
     <!-- 新建弹窗对话框 -->
     <el-dialog v-model="dialogFormVisible" title="新建用户">
@@ -194,7 +207,7 @@ import {
   updateUserPost,
   delUserDelete,
   searchUserGet,
-  updateUserPwdPost
+  updateUserPwdPost, getBlackUserDataGet, delBlackUserDelete
 } from "@/utils/apis"
 
 export default {
@@ -208,11 +221,13 @@ export default {
         pagenum: 1,
       },
       userInfoList: [],
+      blackUserList: [],
       total: 0,
       //状态控制
       dialogFormVisible: false,
       dialogFormVisible1: false,
       dialogFormVisible2: false,
+      dialogTableVisibleblack: false,
       fromData: {
         user: "",
         role: "",
@@ -325,6 +340,51 @@ export default {
             resetSsData()
           }
       )
+    }
+
+    const blackListUser = function () {
+      if (localStorage.getItem('userToken') === "undefined" || localStorage.getItem('userToken') === null) {
+        router.push({name: 'loginView'});
+        return
+      }
+      data.dialogTableVisibleblack = true;
+      getBlackUserDataGet().then(
+          res => {
+              data.blackUserList = res.user_list;
+            }
+      )
+    }
+
+    const blackUserDel = row => {
+      if (localStorage.getItem('userToken') == "undefined" || localStorage.getItem('userToken') == null) {
+        router.push({name: 'loginView'});
+        return
+      }
+      const {name} = row
+      // 请求里必须传入对象
+      delBlackUserDelete({"user": name}).then(
+          res => {
+            if (res.code != 200) {
+              ElMessage(
+                  {
+                    message: res.msg,
+                    type: "error",
+                    duration: 5000,
+                  }
+              )
+              return
+            }
+            data.dialogTableVisibleblack = false;
+            ElMessage(
+                {
+                  message: res.msg,
+                  type: "success",
+                  duration: 5000,
+                }
+            )
+          }
+      )
+
     }
 
 
@@ -575,6 +635,8 @@ export default {
       options,
       InfoFilled,
       userFY,
+      blackListUser,
+      blackUserDel,
     }
   }
 };

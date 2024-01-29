@@ -69,6 +69,24 @@ export const getUserDataGet = data => {
     )
 }
 
+export const getBlackUserDataGet = data => {
+    return get(
+        {
+            url: "/user/blacklist",
+            data
+        }
+    )
+}
+
+export const delBlackUserDelete = data => {
+    return del(
+        {
+            url: "/user/blacklist/del",
+            data
+        }
+    )
+}
+
 
 // ############################## Text #####################################
 

@@ -3,12 +3,12 @@
   <div class="bj" style="margin-top: 15px">
     <ul class="infinite-list" style="overflow: auto; margin-top: 10px;">
       <el-table :data="networkList" style="width: 100%">
-        <el-table-column prop="laddr" label="源地址和端口"/>
-        <el-table-column prop="pid" label="pid"/>
+        <el-table-column prop="laddr" label="源地址和端口" width="200"/>
+        <el-table-column prop="pid" label="pid" width="100"/>
         <el-table-column prop="process" label="进程名"/>
         <el-table-column prop="raddr" label="目标地址和端口"/>
-        <el-table-column prop="status" label="状态"/>
-        <el-table-column prop="type" label="类型"/>
+        <el-table-column prop="status" label="状态" width="100"/>
+        <el-table-column prop="type" label="类型" width="100"/>
       </el-table>
     </ul>
   </div>
