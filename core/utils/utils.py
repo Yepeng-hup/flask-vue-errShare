@@ -20,26 +20,12 @@ s = Select_tables()
 
 ################################ 工具函数 #########################################################
 
-# 传入列表套元组，转换为列表套字典
-def data_init(data) -> list:
-    user_list = []
-    for i in data:
-        u = {
-            "user": i[0],
-            "role": i[1],
-            "phone": i[2],
-            "mailbox": i[3]
-        }
-        user_list.append(u)
-    return user_list
-
-
-def data_init_rel(data, dict_) -> list:
-    l = []
-    for i in data:
-        u = dict_
-        l.append(u)
-    return l
+# def data_init_rel(data, dict_) -> list:
+#     l = []
+#     for i in data:
+#         u = dict_
+#         l.append(u)
+#     return l
 
 
 # 检测端口是否在线
@@ -82,11 +68,6 @@ def check_localhost_site(url) -> bool:
     except requests.exceptions.RequestException as e:
         svc_log_err(f"errShare site [{url}] fail, {e}")
         return False
-
-
-# 获取所有路由
-def get_all_route() -> list:
-    pass
 
 
 # 生成token

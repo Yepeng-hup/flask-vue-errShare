@@ -12,7 +12,7 @@ p = Pwd_encryption_decrypt()
 
 def create_tables():
     new_list = []
-    table_list = ["users", "blacklist"]
+    table_list = ["users", "blacklist", "login_blacklist"]
     db_exists_table = s.show_all_table()
     for i in db_exists_table:
         new_list.append(i[0])
@@ -25,6 +25,9 @@ def create_tables():
             cursor.execute(
                 '''CREATE TABLE IF NOT EXISTS blacklist (id INTEGER PRIMARY KEY, ipaddr TEXT)''')
             svc_log_info("table [blacklist] create ok.")
+            cursor.execute(
+                '''CREATE TABLE IF NOT EXISTS login_blacklist (id INTEGER PRIMARY KEY, username TEXT)''')
+            svc_log_info("table [login_blacklist] create ok.")
             return
         except:
             print(traceback.format_exc())
@@ -51,6 +54,15 @@ def create_tables():
                         svc_log_info("add table [blacklist] create ok.")
                     except:
                         svc_log_err("add table [blacklist] create fail.")
+                        print(traceback.format_exc())
+                        sys.exit(1)
+                elif table == "login_blacklist":
+                    try:
+                        cursor.execute(
+                            '''CREATE TABLE IF NOT EXISTS login_blacklist (id INTEGER PRIMARY KEY, username TEXT)''')
+                        svc_log_info("add table [login_blacklist] create ok.")
+                    except:
+                        svc_log_err("add table [login_blacklist] create fail.")
                         print(traceback.format_exc())
                         sys.exit(1)
                 else:

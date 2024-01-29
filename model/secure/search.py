@@ -1,5 +1,7 @@
-from core.svclog import svc_log_warn
 from flask import request
+
+from core.svclog import svc_log_warn
+
 
 
 class Search_secure(object):
@@ -10,7 +12,3 @@ class Search_secure(object):
                 svc_log_warn(f"search content illegality, ip -> [{request.remote_addr}], keywords -> [{char}]")
                 return True
         return False
-
-
-
-
