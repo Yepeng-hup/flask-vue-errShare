@@ -21,7 +21,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="configBlacklist">加入黑名单</el-button>
-        <el-button @click="table = true">查看黑名单</el-button>
+        <el-button type="info" @click="table = true">查看黑名单</el-button>
       </el-form-item>
     </el-form>
 
