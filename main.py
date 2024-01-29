@@ -19,7 +19,6 @@ from view.adm.systems import systems
 from view.adm.iptabless import iptabless
 from view.adm.black import black
 
-
 app = Flask(__name__)
 i = Inits()
 IMG_FOLDER = 'upload/images'
@@ -49,19 +48,38 @@ def clogo():
     print("====================================================================")
 
 
+# 获取所有路由,可以根据这个细分权限，启动时可以直接初始化掉，我这里面没有细分权限，只是编写了这个
+def get_all_route() -> list:
+    route_list = list()
+    for rule in app.url_map.iter_rules():
+        route_obj = {
+            "route_name": rule.endpoint,
+            "route_path": rule.rule,
+        }
+        route_list.append(route_obj)
+    print(route_list)
+    return route_list
+
+
 @app.route('/files/<path:filename>')
 def protected_file(filename):
-    client_ip = request.remote_addr
-    if client_ip in fk_file_video_acc_white:
+    # client_ip = request.remote_addr
+    # if len(fk_file_video_acc_white) == 1:
+    #     if fk_file_video_acc_white[0] == "all":
+    #         return send_from_directory(IMG_FOLDER, filename)
+    # if client_ip in fk_file_video_acc_white:
         return send_from_directory(IMG_FOLDER, filename)
-    else:
-        svc_log_warn(f"error you don't have permission images -> [{client_ip}]")
-        return jsonify({"code": 404, "msg": "There is no such thing"})
+    # else:
+    #     svc_log_warn(f"error you don't have permission images -> [{client_ip}]")
+    #     return jsonify({"code": 404, "msg": "There is no such thing"})
 
 
 @app.route('/videos/<path:filename>')
 def protected_video(filename):
     client_ip = request.remote_addr
+    if len(fk_file_video_acc_white) == 1:
+        if fk_file_video_acc_white[0] == "all":
+            return send_from_directory(VIDEO_FOLDER, filename)
     if client_ip in fk_file_video_acc_white:
         return send_from_directory(VIDEO_FOLDER, filename)
     else:
