@@ -28,47 +28,93 @@
                     <div class="form-group">
                         <input style="width: 300px" type="text" name="searchText" class="form-control" placeholder="输入标题关键字">
                     </div>
-                      <input type="submit" class="btn btn-success" value="搜索">
+                      <input type="submit" class="btn" value="搜索" style="background-color: #0b87e7; color: #eeeeee">
                   </form>
               </ul>
             <span style="color: red">{{ info }}</span>
-              <ul class="post-list-group">
-                  {% for i in text_list %}
-                      <li>
-                        <div class="author-avatar-group">
-                          <img src="/static/images/user.png" alt="x">
-                        </div>
-                                <div class="post-info-group">
-                                  <p class="post-info">
-                                    <h4 class="post-title">
-                                      <a style="text-decoration: none; color: #0b87e7" href="/documents/select/{{i.titel}}">{{i.titel}}</a>
-                                    </h4>
-                                    <span><img src="/static/images/edit.png" style="width: 15px"/>: {{i.user}}</span>
-                                    <span style="margin-left: 20px"><img src="/static/images/date.png" style="width: 15px"/>: {{i.date}}</span>
-                                    <span style="margin-left: 20px"><img src="/static/images/label.png" style="width: 15px"/>: {{i.label}}</span>
-                                  </p>
-                                </div>
+              <ul class="post-list-group" id="data"></ul>
+        </div>
 
-                      </li>
-                  {% endfor %}
+        <div id="pagination" style="margin-top: 10px; margin-bottom: 15px"></div>
 
-              </ul>
-
-            <div>
-<!--                分页代码 -->
-            </div>
-    </div>
   </div>
 
 
-  <div class="col-xs-6 col-md-2" style="margin-left: 30px; margin-top: 50px">
+    <div class="col-xs-6 col-md-2" style="margin-left: 30px; margin-top: 50px">
           <div class="list-group" style="margin-top: 10px">
               <a href="/index" class="list-group-item" style="text-align: center; background-color: #0b87e7;color: #ffffff">所有分类</a>
               {% for i in all_class_list %}
                 <a href="/choose/{{i.class}}" class="list-group-item" style="text-align: center">{{i.class}}</a>
               {% endfor %}
           </div>
-  </div>
+    </div>
 
+    <script>
+        let logData = {{ text_list | safe}};
+        const pageSize = 10;
+        let currentPage = 1;
+
+        function getCurrentPageData() {
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            return logData.slice(start, end);
+        }
+
+        function renderTable() {
+            const showLists = getCurrentPageData();
+            let html = '';
+            for (const item of showLists) {
+                html += `<li>`;
+                html += `<div class="author-avatar-group"><img src="/static/images/user.png" alt="x"></div>`;
+                html += `<div class="post-info-group">`;
+                html += `<p class="post-info" >`;
+                html += `<h4 class="post-title"><a style="text-decoration: none; color: #0b87e7" href="/documents/select/${item.titel}">${item.titel}</a></h4>`;
+                html += `<span><img src="/static/images/edit.png" style="width: 15px"/>: ${item.user}</span>`;
+                html += `<span style="margin-left: 20px"><img src="/static/images/date.png" style="width: 15px"/>: ${item.date}</span>`;
+                html += `<span style="margin-left: 20px"><img src="/static/images/label.png" style="width: 15px"/>: ${item.label}</span>`;
+                html += `</p>`;
+                html += `</div>`;
+                html += `</li>`
+            }
+            document.getElementById('data').innerHTML = html;
+        }
+
+        function getTotalPage() {
+            return Math.ceil(logData.length / pageSize);
+        }
+
+        function renderPagination() {
+            const totalPage = getTotalPage();
+            let html = `第 <span style="color: #0b87e7">${currentPage}</span> 页 / 共 ${totalPage} 页
+                        <button id="prevPage" class="btn" style="margin-left: 5px; background-color: #0b87e7; color: #eeeeee">上一页</button>
+                        <button id="nextPage" class="btn" style="margin-left: 5px; background-color: #0b87e7; color: #eeeeee">下一页</button>`;
+            document.getElementById('pagination').innerHTML = html;
+            const prevPageBtn = document.getElementById('prevPage');
+            if (currentPage === 1) {
+                prevPageBtn.disabled = true;
+            } else {
+                prevPageBtn.disabled = false;
+                prevPageBtn.addEventListener('click', function () {
+                    currentPage--;
+                    renderPagination();
+                    renderTable();
+                });
+            }
+            const nextPageBtn = document.getElementById('nextPage');
+            if (currentPage === totalPage) {
+                nextPageBtn.disabled = true;
+            } else {
+                nextPageBtn.disabled = false;
+                nextPageBtn.addEventListener('click', function () {
+                    currentPage++;
+                    renderPagination();
+                    renderTable();
+                });
+            }
+        }
+
+        renderPagination();
+        renderTable();
+    </script>
 
 </body>
