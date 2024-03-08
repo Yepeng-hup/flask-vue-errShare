@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>个人中心</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
   <el-alert title="当做样式。如需要，自行二次开发。" type="info" effect="dark"/>
   <el-row :gutter="20">
     <el-col :span="8">
@@ -55,6 +60,7 @@
 
 <script>
 import {reactive, toRefs, ref} from "vue";
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "UserCenterView",
@@ -71,6 +77,7 @@ export default {
       ...toRefs(data),
       value,
       userName,
+      ArrowRight,
     }
 
   }

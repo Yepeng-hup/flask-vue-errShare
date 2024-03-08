@@ -1,5 +1,11 @@
 <template>
-  <div id="articlewriting">
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item>文章编写</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+  <div id="articlewriting" style="margin-top: 15px">
     <div>
       <span style="color: #606266"><b>文章标题: </b></span>
       <el-input v-model="titleTxt" style="width: 50%;" placeholder="输入文章标题"/>
@@ -57,6 +63,7 @@ import {ElMessage} from 'element-plus'
 import {Editor, Toolbar} from '@wangeditor/editor-for-vue'
 import {useRouter} from "vue-router";
 import {showWzClassGet, contentWritePost, showWzLabelGet} from '@/utils/apis'
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "articleWritingView",
@@ -190,6 +197,7 @@ export default {
       labelValue,
       titleTxt,
       getAllcontent,
+      ArrowRight,
     };
   }
 }

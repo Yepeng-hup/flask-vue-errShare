@@ -1,5 +1,12 @@
 <template>
-  <div id="articlepic" class="home-centext">
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item>文章版图</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div id="articlepic" class="home-centext" style="margin-top: 15px">
     <span style="color: #606266"><b>全部文章</b>({{ nums }})</span>
     <el-divider border-style="dashed"/>
 
@@ -120,6 +127,7 @@ import {
   editContentPost,
   updateContentPost
 } from "@/utils/apis"
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "articlePicView",
@@ -349,6 +357,7 @@ export default {
       handleCreated,
       mode: 'default',
       editorRef,
+      ArrowRight,
     }
 
   }

@@ -1,10 +1,16 @@
 <template>
-  <div id="d01" style="width: auto; height: 500px;"></div>
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>数据表盘</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+  <div id="d01" style="width: auto; height: 500px; margin-top: 15px;"></div>
 </template>
 
 <script>
 import {getDataGet} from "@/utils/apis"
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
 
@@ -45,7 +51,9 @@ export default {
 
     showDataD01();
 
-    return {};
+    return {
+      ArrowRight,
+    };
   },
 
 };

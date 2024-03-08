@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>系统资源</el-breadcrumb-item>
+      <el-breadcrumb-item>进程状态</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+  <div style="margin-top: 15px">
     <el-alert title="系统进程过滤的不是很完善，如需完善自己可以二开，通过json定制指定进程" type="warning" effect="dark"/>
   </div>
   <div class="bj" style="margin-top: 15px">
@@ -42,6 +49,7 @@ import {reactive, toRefs, ref} from "vue";
 import {getSysProcessGet, getProcessInfoPost, processKillPost} from "@/utils/apis"
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "SysProcessView",
@@ -141,6 +149,7 @@ export default {
       catProcessInfo,
       killProcess,
       dialogTableVisible,
+      ArrowRight,
     }
 
   }

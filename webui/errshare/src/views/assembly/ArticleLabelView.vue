@@ -1,5 +1,12 @@
 <template>
-  <div id="articlelabel" class="home-centext">
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item>文章标签</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div id="articlelabel" class="home-centext" style="margin-top: 15px">
     <div>
       <span style="color: #606266">标签名称: </span>
       <el-input id="label" v-model="labelName" style="width: 40%;" placeholder="输入新标签"/>
@@ -41,6 +48,7 @@ import {Delete,} from '@element-plus/icons-vue'
 import {ElMessage} from 'element-plus'
 import {useRouter} from "vue-router";
 import {addLabelPost, getLabelGet, delLabelDelete} from "@/utils/apis"
+import { ArrowRight } from '@element-plus/icons-vue';
 
 
 export default {
@@ -162,6 +170,7 @@ export default {
       addLabel,
       deleteLabel,
       labelFY,
+      ArrowRight,
     }
   }
 }

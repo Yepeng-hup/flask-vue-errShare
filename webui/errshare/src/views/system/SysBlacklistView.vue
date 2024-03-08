@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>黑名单</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div style="margin-top: 15px">
     <el-alert effect="dark"
               title="注意！Linux黑名单只对调用了tcp_wrappers和编译libwrap.so的才起作用，可以用ldd命令查看是否支持。"
               type="error"/>
@@ -64,6 +71,7 @@ import {reactive, toRefs, ref} from "vue";
 import {configBlackPost, showBlackPost, deleteLocalDel, deleteDenyDel} from "@/utils/apis";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue'
 
 export default {
   name: "SysBlacklistView",
@@ -198,6 +206,7 @@ export default {
       handleClick,
       localDel,
       denyDel,
+      ArrowRight,
     }
 
   }

@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>IPTABLES</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div style="margin-top: 15px">
     <el-alert title="个人私服使用，并不完善。如需要，自己二次开发。" type="warning" effect="dark"/>
   </div>
 
@@ -50,6 +57,7 @@ import {reactive, ref, toRefs} from "vue";
 import {getIptablesGet, addRulePost, deleteRuleDel} from "@/utils/apis"
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "SysIptablesView",
@@ -184,6 +192,7 @@ export default {
       cancellationRule,
       confirmsRule,
       deleteRule,
+      ArrowRight,
     }
 
   }

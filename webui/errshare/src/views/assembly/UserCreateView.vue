@@ -1,5 +1,11 @@
 <template>
-  <div id="usercreate">
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div id="usercreate" style="margin-top: 15px">
     <div class="home-centext">
       <div class="flex">
         <div class="input-box">
@@ -209,6 +215,7 @@ import {
   searchUserGet,
   updateUserPwdPost, getBlackUserDataGet, delBlackUserDelete
 } from "@/utils/apis"
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "userCreateView",
@@ -637,6 +644,7 @@ export default {
       userFY,
       blackListUser,
       blackUserDel,
+      ArrowRight,
     }
   }
 };

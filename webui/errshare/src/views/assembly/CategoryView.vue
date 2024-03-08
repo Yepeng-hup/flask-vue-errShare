@@ -1,5 +1,12 @@
 <template>
-  <div id="category" class="home-centext">
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item>文章分类</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+
+  <div id="category" class="home-centext" style="margin-top: 15px">
     <div>
       <span style="color: #606266">分类名称: </span>
       <el-input v-model="className" id="classs" style="width: 40%;" placeholder="输入新分类"/>
@@ -43,6 +50,7 @@ import {Delete,} from '@element-plus/icons-vue'
 import {ElMessage} from 'element-plus'
 import {useRouter} from "vue-router";
 import {getClassGet, addClassPost, delClassDelete} from "@/utils/apis"
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "categoryView",
@@ -164,6 +172,7 @@ export default {
       addClass,
       deleteClass,
       classFY,
+      ArrowRight,
     }
   }
 }

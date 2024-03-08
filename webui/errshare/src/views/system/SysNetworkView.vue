@@ -1,4 +1,11 @@
 <template>
+  <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+      <el-breadcrumb-item>系统资源</el-breadcrumb-item>
+      <el-breadcrumb-item>网络状态</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
 
   <div class="bj" style="margin-top: 15px">
     <ul class="infinite-list" style="overflow: auto; margin-top: 10px;">
@@ -20,6 +27,7 @@ import {reactive, toRefs} from "vue";
 import {getSysNetworkGet} from "@/utils/apis"
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue';
 export default {
   name: "SysNetworkView",
   setup(){
@@ -54,7 +62,8 @@ export default {
 
 
     return {
-      ...toRefs(data)
+      ...toRefs(data),
+      ArrowRight,
     }
 
   }

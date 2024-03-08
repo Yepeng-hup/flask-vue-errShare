@@ -1,5 +1,10 @@
 <template>
   <div>
+    <el-breadcrumb :separator-icon="ArrowRight">
+      <el-breadcrumb-item>回收站</el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+  <div style="margin-top: 15px">
     <el-alert title="注意！这里删除就代表彻底删除了。" type="error" effect="dark"/>
   </div>
   <div class="home-centext">
@@ -44,6 +49,7 @@ import {reactive, toRefs} from "vue"
 import {getRecoveryInfoGet, delRecDelete, revokeRecPost} from "@/utils/apis"
 import {ElMessage} from 'element-plus'
 import {useRouter} from "vue-router";
+import { ArrowRight } from '@element-plus/icons-vue';
 
 export default {
   name: "recoveryView",
@@ -156,6 +162,7 @@ export default {
       recoveryDelete,
       revoke,
       recFY,
+      ArrowRight,
     }
   }
 }
